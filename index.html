@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>express api 만들기 </title>
+</head>
+<body>
+    <h1 id="sound"></h1>
+    <input id="name" type="text">
+    <button onclick="getSound()">API 요청</button>
+    <script>
+        function getSound() {
+            const name = document.getElementById('name').value;
+            fetch(`https://port-0-api-test-koh2xlj0y1wep.sel4.cloudtype.app/sound/${name}`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                document.getElementById('sound').innerHTML = data.sound
+            })
+        }
+    </script>
+</body>
+</html>
