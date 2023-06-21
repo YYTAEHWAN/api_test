@@ -25,10 +25,11 @@
 // }
 // 함수 형식 설명 끝
 
-import { db } from "../../../services/firebaseAPI";
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
 
-const cryptoWalletListDB = {
+module.exports = {
   // 낭낭이 제공하는 크립토 월렛 리스트를 만드는 함수
   async createCryptoWalletList( input_crypto_wallet_name ) {
       // 접근 db 이름 : nangnang_crypto_wallet_list
@@ -186,5 +187,3 @@ const cryptoWalletListDB = {
       }
     }
 }
-
-export { cryptoWalletListDB };

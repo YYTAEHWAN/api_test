@@ -1,13 +1,14 @@
-import {db} from '../../../../services/firebaseAPI';
-import {productInfoDB} from '../../../User/SellerData/Product/ProductInfo/ProductInfoCRUD.js';
-import {sellerProductsDB} from '../../../User/SellerData/Product/SellerProduct/SellerProductCRUD';
-import {statusInfoDB} from './../../../PaymentReceipt/PaymentReceiptStatusInfo/PaymentReceiptStatusInfoCRUD';
-import {MultipleProductsInfoDB} from './../../../PaymentReceipt/PaymentReceiptMultipleProductsInfo/PaymentReceiptMultipleProductsInfoCRUD';
-import {ParticipantsDB} from './../../../PaymentReceipt/PaymentReceiptParticipants/PaymentReceiptParticipantsCRUD';
-import {PriceAddressInfoDB} from './../../../PaymentReceipt/PaymentReceiptPriceAddressInfo/PaymentReceiptPriceAddressInfoCRUD';
-import {NetworkInfoDB} from './../../../PaymentReceipt/PaymentReceiptNetworkInfo/PaymentReceiptNetworkInfoCRUD';
 
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
+const productInfoDB = require('../../User/SellerData/Product/ProductInfo/ProductInfoCRUD');
+const sellerProductsDB = require('../../User/SellerData/Product/SellerProduct/SellerProductCRUD');
+const statusInfoDB = require('../PaymentReceiptStatusInfo/PaymentReceiptStatusInfoCRUD');
+const MultipleProductsInfoDB = require('../PaymentReceiptMultipleProductsInfo/PaymentReceiptMultipleProductsInfoCRUD');
+const ParticipantsDB = require('../PaymentReceiptParticipants/PaymentReceiptParticipantsCRUD');
+const PriceAddressInfoDB = require('../PaymentReceiptPriceAddressInfo/PaymentReceiptPriceAddressInfoCRUD');
+const NetworkInfoDB = require('../PaymentReceiptNetworkInfo/PaymentReceiptNetworkInfoCRUD');
 
 // // 함수를 사용할 때 넣을 인자들을 묶어놓은 객체들 예시입니다.
 // let statusInfo = {
@@ -158,23 +159,6 @@ const checkProductNameExistence = async (productInfoIdxList, product_data) => {
     return -1; // 오류 발생
   }
 };
-
-// const productIdxAndNameObject = [];
-//         productNamesSnapshot.forEach((doc) => {
-//             const data_Idx = doc.id;
-//             const data = doc.data();
-//             productIdxAndNameObject.push({ 
-//                     dataIdx: data_Idx,
-//                     productName : data.product_name });
-//         });
-//         console.log("productIdxAndNameObject : ", productIdxAndNameObject);        Object.entries(productIdxAndNameObject).forEach(([dataIdx, productName]) => {
-//             console.log(`dataIdx: ${dataIdx}, productName: ${productName}`);
-//             if(productName === product_data.product_name) {
-//                 // 정규식(Regular Expression)을 활용하여 숫자 부분을 추출
-//                 const idxNumberOnly = dataIdx.match(/\d+/)[0];
-//                 return idxNumberOnly;
-//             }
-//         });  
 
 
 
@@ -497,6 +481,7 @@ async function AfterTxCompleted(payment_receipt_idx) {
     const result = await endSetting(payment_receipt_idx, 999)
     return result; // 1: 성공, -1: 실패
 }
+
 
 export { 
     saveProductDataSentBySeller,

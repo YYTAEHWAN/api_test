@@ -14,9 +14,10 @@
 //    // 함수에서 받는 인자들 설명 : 인자1, 인자2, ...
 // 함수 형식 설명 끝
 
-import { db } from '../../../../../services/firebaseAPI';
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
-const sellersChosenMainBlockchainDB = {
+module.exports = {
   // seller가 선택한 메인 블록체인 네트워크 정보 테이블에 데이터를 생성하는 함수
   async createSellersChosenMainBlockchain(sellerId, mainBlockchainIdx) {
       // 접근 db table name: sellers_chosen_main_blockchain
@@ -124,5 +125,3 @@ const sellersChosenMainBlockchainDB = {
   }
 
 }
-
-export { sellersChosenMainBlockchainDB };

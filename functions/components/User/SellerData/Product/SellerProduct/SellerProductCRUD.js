@@ -14,9 +14,10 @@
 //    // 함수에서 받는 인자들 설명 : 인자1, 인자2, ...
 // 함수 형식 설명 끝
 
-import { db } from "../../../../../services/firebaseAPI";
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
-const sellerProductsDB = {
+module.exports = {
   // seller_products 데이터 생성하는 함수
   async createSellerProducts(sellerId, productInfoIdx) {
     // 접근 db table name : seller_products
@@ -96,6 +97,3 @@ const sellerProductsDB = {
     }
   }
 }
-
-
-export { sellerProductsDB };

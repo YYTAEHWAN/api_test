@@ -16,10 +16,11 @@
 // DB 테이블: nangnang_main_blockchain_list
 // 칼럼: idx (자동 증가, 기본 키), name (블록체인 이름)
 
-import { db } from "../../../services/firebaseAPI";
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
 
-const mainBlockchainListDB = {
+module.exports = {
   // 낭낭이 제공하는 메인 블록체인 리스트를 생성하는 함수
   async createMainBlockchainList(inputMainBlockchainName) {
     // 접근 db 이름: nangnang_main_blockchain_list
@@ -144,5 +145,3 @@ const mainBlockchainListDB = {
     }
   }
 }
-
-export { mainBlockchainListDB };

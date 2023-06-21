@@ -17,6 +17,11 @@ const ParticipantsRouter = require('./components/PaymentReceipt/PaymentReceiptPa
 const NetworkInfoRouter = require('./components/PaymentReceipt/PaymentReceiptNetworkInfo/NetworkInfoRouter');
 const MultipleProductsInfoRouter = require('./components/PaymentReceipt/PaymentReceiptMultipleProductsInfo/MultipleProductsInfoRouter');
 
+// 0621 demo 
+const demoProcessRouter = require('./components/BroFunctions/DongyuBro/PaymentProcess/demo0622');
+nangnangDB.use(demoProcessRouter);
+// 0621 demo
+
 
 // UserDataRouters.js에서 정의한 라우터를 사용
 nangnangDB.use(userDataRouter);

@@ -19,6 +19,56 @@ const db = admin.firestore();
 
 module.exports = {
     // 결제 영수증 상태 정보를 저장하는 함수
+    async create0621only(datas) {
+        // 접근 db table name: payment_receipt_status_info
+        // payment_receipt_status_info db table column: payment_receipt_idx[increment, pk], payment_status, payment_start_time, payment_end_time
+    
+        // paymentReceiptIdx: 결제 영수증 식별 idx - 자동 생성
+
+        // 해당 영수증이 발행된 후 상태가 "테이블 만드는 중(0)" 인지 "결제 중(1)" 인지, // 결제 전 관련 테이블 모두 완성 상태 번호 = "0011"
+        // 아니면 "결제 완료(999)" 인지, "환불 요청(2)" 인지, "환불 완료(3)" 인지, "결제 실패(-1)" 인지
+        // paymentStatus: 결제 상태 이건 당연히 0에서부터 시작
+
+        // paymentStartTime: 결제 시작 시점 - 자연생성
+        // paymentEndTime: 결제 완료 시점 - 나중 첨가
+
+        try {
+            // const statusInfoRef = db.collection("payment_receipt_status_info");
+
+            // // payment_receipt_status_info 컬렉션의 행 개수를 세기 위해 모든 문서를 가져옴
+            // const snapshot = await statusInfoRef.get();
+            // const rowCount = snapshot.size;
+            // console.log("statusInfoRef - 새로운 데이터를 생성하기 전 rowCount:", rowCount);
+
+            // // product_info 컬렉션의 행 개수 + 1 = 새로운 문서의 product_info_idx 값
+            // const paymentReceiptIdx = rowCount+1;
+
+            // 데이터가 이미 존재하는지 확인
+            const doc = await db.collection('payment_receipt_status_info').doc(String(datas.payment_receipt_idx)).get();
+    
+            if (doc.exists) {
+                console.log('이미 데이터가 존재합니다.');
+                return -1; // 실패
+            } else {
+                // payment_receipt_status_info 컬렉션에 새로운 문서 생성
+                // 데이터 만들기
+                const beginingData = {
+                    payment_receipt_idx: datas.payment_receipt_idx,
+                    payment_status: 0, // 영수증 만드는 중(초기화 중)
+                    payment_start_time: new Date().toLocaleString(),
+                    payment_end_time: null
+                };
+                await db.collection('payment_receipt_status_info').doc(String(datas.payment_receipt_idx)).set(beginingData);
+                console.log('데이터 생성 성공');
+                
+                return datas.payment_receipt_idx; // 성공하면 결제 영수증 식별 idx 반환
+            }
+        } catch (error) {
+            console.error('데이터 생성 실패:', error);
+            return -1; // 실패
+        }
+    },
+
     async create() {
         // 접근 db table name: payment_receipt_status_info
         // payment_receipt_status_info db table column: payment_receipt_idx[increment, pk], payment_status, payment_start_time, payment_end_time
