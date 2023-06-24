@@ -1,0 +1,35 @@
+{
+"multipleProductsInfo":
+    {
+        "payment_receipt_idx": "8",
+        "product_info_idx":"8",
+        "quantity":""
+    },
+  "networkInfo":{
+    "payment_receipt_idx": "8",
+    "detailed_network_name":"",
+    "detailed_network_real_id_num":"",
+    "main_blockchain_name":"",
+    "payment_wallet_name":""
+  },
+  "participants":{
+    "payment_receipt_idx": "8",
+    "consumer_id":"",
+    "seller_id":""
+  },
+  "priceAddressInfo":{
+    "payment_receipt_idx":"8",
+    "receiver_seller_id":"",
+    "receiver_wallet_address":"",
+    "sender_consumer_id":"",
+    "sender_wallet_address":"",
+    "total_coin_price":"",
+    "total_won_price":""
+  },
+  "statusInfo":{
+    "payment_receipt_idx":"8",
+    "payment_end_time":"",
+    "payment_start_time":"",
+    "payment_status":""
+  }
+}

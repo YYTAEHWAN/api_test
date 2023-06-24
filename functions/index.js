@@ -42,5 +42,4 @@ nangnangDB.use(MultipleProductsInfoRouter);
 
 // // ---- PaymentReceipt 끝 ----
 
-
 exports.api = functions.region("asia-northeast3").https.onRequest(nangnangDB);
