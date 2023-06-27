@@ -19,6 +19,7 @@
 const admin = require("firebase-admin");
 const db = admin.firestore();
 
+
 module.exports =   {
   // product_info 데이터 생성하는 함수
   async createProductInfo(productName, productWonPricePer) {

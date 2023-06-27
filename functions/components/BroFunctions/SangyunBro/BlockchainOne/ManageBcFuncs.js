@@ -1,5 +1,6 @@
-import {mainBlockchainListDB} from '../../../NangNangServe/MainBlockchainList/MainBlockchainListCRUD'
-import {sellersChosenMainBlockchainDB} from '../../../User/SellerData/Chosen/Blockchain/SellersChosenMainBlockchainCRUD'
+
+const sellersChosenMainBlockchainDB = require("../../../User/SellerData/Chosen/Blockchain/SellersChosenMainBlockchainCRUD");
+const mainBlockchainListDB = require("../../../NangNangServe/MainBlockchainList/MainBlockchainListCRUD");
 
 // 4. 블록체인 관리
 // 4-1. 낭낭에서 사용 가능한 블록체인 조회

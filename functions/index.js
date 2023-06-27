@@ -17,6 +17,7 @@ const ParticipantsRouter = require('./components/PaymentReceipt/PaymentReceiptPa
 const NetworkInfoRouter = require('./components/PaymentReceipt/PaymentReceiptNetworkInfo/NetworkInfoRouter');
 const MultipleProductsInfoRouter = require('./components/PaymentReceipt/PaymentReceiptMultipleProductsInfo/MultipleProductsInfoRouter');
 
+const PaymentProcessRouter = require('./components/BroFunctions/DongyuBro/PaymentProcess/PaymentProcessRouter');
 
 // UserDataRouters.js에서 정의한 라우터를 사용
 nangnangDB.use(userDataRouter);
@@ -34,6 +35,8 @@ nangnangDB.use(NetworkInfoRouter);
 // MultipleProductsInfoRouter.js에서 정의한 라우터를 사용
 nangnangDB.use(MultipleProductsInfoRouter);
 
+// functions
+nangnangDB.use(PaymentProcessRouter);
 
 // // ---- PaymentReceipt 끝 ----
 

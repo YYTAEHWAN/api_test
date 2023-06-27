@@ -18,8 +18,10 @@
 // }
 // 함수 형식 설명 끝
 
-import { userDataDB } from "../../../User/UserData/UserDataCRUD";
-import { sellerDB } from "../../../User/SellerData/SellerCRUD";
+const userDataDB = require("../../../User/UserData/UserDataCRUD");
+const sellerDB = require("../../../User/SellerData/SellerCRUD");
+
+
 
 // 1. 판매자 정보(내정보) 가져오기
 async function getSellerData(seller_id) {

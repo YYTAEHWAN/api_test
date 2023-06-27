@@ -14,10 +14,12 @@
 // 함수 형식 설명 끝
 
 
-import { db } from '../../../../../services/firebaseAPI';
+const admin = require("firebase-admin");
+const db = admin.firestore();
 
 
-const sellersChosenWalletDB = {
+// const sellersChosenWalletDB = {
+module.exports = {
   // sellet가 선택한 크립토 지갑들 정보 테이블에 데이터를 생성(추가)하는 함수
   async createSellersChosenWallet(sellerId, cryptoWalletIdx) {
       // 접근 db table name: sellers_chosen_wallet
@@ -103,6 +105,3 @@ const sellersChosenWalletDB = {
     }
   }
 }
-
-
-export {  sellersChosenWalletDB };
