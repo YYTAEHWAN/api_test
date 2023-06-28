@@ -21,8 +21,8 @@ PaymentProcessRouter.post('/paymentprocess/startsetting', async (req, res) => {
 PaymentProcessRouter.post('/paymentprocess/preparePayment', async (req, res) => {
     try {
         console.log("paymentreceiptidx: ", req.body.payment_receipt_idx);
-        console.log("sellerId : ", req.body.sellerId);
-        console.log("consumerId : ", req.body.consumerId);
+        console.log("sellerId : ", req.body.seller_id);
+        console.log("consumerId : ", req.body.consumer_id);
         console.log("products : ", req.body.products);
         const result = await PaymentProcessFuncs.preparePayment(req.body);
 

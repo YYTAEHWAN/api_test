@@ -184,7 +184,7 @@ module.exports = {
         
 
         // datas에 들어있는 데이터들
-        // input_payment_receipt_idx, products, seller_id, customer_id
+        // input_payment_receipt_idx, products, seller_id, consumer_id
         
 
         let result = -1; // -1로 초기화
@@ -194,7 +194,7 @@ module.exports = {
         const payment_receipt_idx = datas.payment_receipt_idx; // 결제 영수증 식별 idx
         const products = datas.products; // 제품 정보
         const seller_id = datas.seller_id; // 판매자 id
-        const customer_id = datas.customer_id; // 소비자 id
+        const consumer_id = datas.consumer_id; // 소비자 id
 
         // 3-2.participants DB 생성
         // 해당 영수증(거래)에 참여한 consumer_id와 seller_id 저장
@@ -227,7 +227,7 @@ module.exports = {
                 // 저장하는 곳은 payment_receipt_multiple_products_info db
                 const input_datas = {
                     "payment_receipt_idx" : payment_receipt_idx,
-                    "product_info_idx_num" : product_info_idx_num,
+                    "product_info_idx" : product_info_idx_num,
                     "quantity" : one_product_info_object.quantity
                 }
                 result = await multipleProductsInfoDB.create(input_datas); 
@@ -243,22 +243,23 @@ module.exports = {
         //     payment_receipt_idx: payment_receipt_idx,
         //     total_won_price: total_won_price,
         //     total_coin_price: null, // 나중에 정해짐
-        //     sender_consumer_id: customer_id,
+        //     sender_consumer_id: consumer_id,
         //     receiver_seller_id: seller_id,
         //     sender_wallet_address: null, // 나중에 정해짐
         //     receiver_wallet_address: null // 나중에 정해짐
         // }
-        // payment_receipt_idx, null, total_won_price, customer_id, seller_id, null, null
+        // payment_receipt_idx, null, total_won_price, consumer_id, seller_id, null, null
         const input_datas_priceAddressInfo = {
             "payment_receipt_idx" : payment_receipt_idx,
             "total_won_price" : total_won_price,
             "total_coin_price" : null,
-            "sender_consumer_id" : customer_id,
+            "sender_consumer_id" : consumer_id,
             "receiver_seller_id" : seller_id,
             "sender_wallet_address" : null,
             "receiver_wallet_address" : null
         }
-
+        console.log("preparePayment에서 PriceAddressInfoDB 사용 시작");
+        console.log("input_datas_priceAddressInfo : ", input_datas_priceAddressInfo);
         const result10 = await priceAddressInfoDB.create(input_datas_priceAddressInfo);
         if (result10 === -1) return -1; // -1: 실패
 

@@ -54,30 +54,27 @@ module.exports = {
         // sender_wallet_address : 발신자 지갑 주소
         // receiver_wallet_address : 수신자 지갑 주소
         
-        const data = {
-            payment_receipt_idx : datas.payment_receipt_idx,
-            total_coin_price : datas.total_coin_price,
-            total_won_price : datas.total_won_price,    
-            sender_consumer_id : datas.sender_consumer_id,
-            receiver_seller_id : datas.receiver_seller_id,
-            sender_wallet_address : datas.sender_wallet_address,
-            receiver_wallet_address : datas.receiver_wallet_address
-        }
+        
         try {
+            console.log("PriceAddressInfoDB.create 시작 1 ");
             // 데이터가 이미 존재하는지 확인
             const doc = await db.collection('payment_receipt_price_address_info').doc(String(datas.payment_receipt_idx)).get();
-
+            console.log("PriceAddressInfoDB.create 시작 2 ");
             if (doc.exists) {
                 console.log('이미 데이터가 존재합니다.');
                 return -1; // 실패
             } else {
+                console.log("PriceAddressInfoDB.create 시작 3 ");
+                console.log("datas: ", datas);
                 // payment_receipt_price_address_info 컬렉션에 새로운 문서 생성
                 await db.collection('payment_receipt_price_address_info')
                 .doc(String(datas.payment_receipt_idx))
                 .set(datas);
+                console.log("PriceAddressInfoDB.create 정상종료");
                 return 1; // 성공
             }
         } catch (error) {
+            console.log("PriceAddressInfoDB.create 비정상 종료");
             console.error('데이터 생성 실패:', error);
             return -1; // 실패
         }

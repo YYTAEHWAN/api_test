@@ -40,5 +40,13 @@ nangnangDB.use(PaymentProcessRouter);
 
 // // ---- PaymentReceipt 끝 ----
 
+nangnangDB.get('/', (req, res) => {
+    if (Math.random() < 0.5) {
+      res.send('World!');
+    } else {
+      res.send('Hello!');
+    }
+});
 
 exports.api = functions.region("asia-northeast3").https.onRequest(nangnangDB);
+
