@@ -22,19 +22,20 @@ const userDataDB = require("../../../User/UserData/UserDataCRUD");
 const sellerDB = require("../../../User/SellerData/SellerCRUD");
 
 
-
-// 1. 판매자 정보(내정보) 가져오기
-async function getSellerData(seller_id) {
+module.exports = {
+  
+  // 1. 판매자 정보(내정보) 가져오기
+  async getSellerData(seller_id) {
     // 접근 db table name : user_data, seller
     // user_data db table column : id[pk], password, consumer_or_not, email, real_name, phone_number, resident_registration_number
     // seller db table column : seller_id[pk], seller_platform_name
-  
+
     // seller_id : 사용자가 입력한 아이디
-  
+
     try {
       // 1단계 : user_data db에서 정보 읽어오기
       const userData = await userDataDB.readUserData(seller_id);
-  
+
       const sellerDataObject = {
         id: userData.id,
         password: userData.password,
@@ -44,7 +45,7 @@ async function getSellerData(seller_id) {
         phone_number: userData.phone_number,
         resident_registration_number: userData.resident_registration_number,
       };
-  
+
       if (sellerDataObject.consumer_or_not === 0) {
         // seller라면 seller db에서 정보 읽어오기
         const sellerDataPlatformName = await sellerDB.readSeller(seller_id);
@@ -65,8 +66,8 @@ async function getSellerData(seller_id) {
     }
   }
 
+}
 
-export { getSellerData };
 
 
 /*
