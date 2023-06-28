@@ -24,6 +24,9 @@ PaymentProcessRouter.post('/paymentprocess/preparePayment', async (req, res) => 
         console.log("sellerId : ", req.body.seller_id);
         console.log("consumerId : ", req.body.consumer_id);
         console.log("products : ", req.body.products);
+        console.log("seller_wallet_address : ", req.body.seller_wallet_address);
+        console.log("consumer_wallet_address : ", req.body.consumer_wallet_address);
+        
         const result = await PaymentProcessFuncs.preparePayment(req.body);
 
         res.status(200).json({

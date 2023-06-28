@@ -195,7 +195,9 @@ module.exports = {
         const products = datas.products; // 제품 정보
         const seller_id = datas.seller_id; // 판매자 id
         const consumer_id = datas.consumer_id; // 소비자 id
-
+        const sender_wallet_address = datas.sender_wallet_address;
+        const receiver_wallet_address = datas.receiver_wallet_address;
+        
         // 3-2.participants DB 생성
         // 해당 영수증(거래)에 참여한 consumer_id와 seller_id 저장
         result = await participantsDB.create(datas); // 저장하는 곳은 payment_receipt_participants db
@@ -255,8 +257,8 @@ module.exports = {
             "total_coin_price" : null,
             "sender_consumer_id" : consumer_id,
             "receiver_seller_id" : seller_id,
-            "sender_wallet_address" : null,
-            "receiver_wallet_address" : null
+            "sender_wallet_address" : sender_wallet_address,
+            "receiver_wallet_address" : receiver_wallet_address
         }
         console.log("preparePayment에서 PriceAddressInfoDB 사용 시작");
         console.log("input_datas_priceAddressInfo : ", input_datas_priceAddressInfo);
