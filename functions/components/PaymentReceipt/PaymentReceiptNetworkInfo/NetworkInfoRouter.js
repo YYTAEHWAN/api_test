@@ -10,8 +10,8 @@ const NetworkInfoRouter = express.Router();
 
 NetworkInfoRouter.post('/paymentreceipt/networkinfo', async (req, res) => {
     try {
-        const networkDatas = req.body;
-        const result = await NetworkInfoDB.create(networkDatas);
+        // const networkDatas = req.body;
+        const result = await NetworkInfoDB.create(req.body);
         res.status(200).json({
             message: "networkinfo data 생성 성공시 1, 실패시 -1, 리턴 data는 result값",
             data: result,
@@ -23,8 +23,8 @@ NetworkInfoRouter.post('/paymentreceipt/networkinfo', async (req, res) => {
 
 NetworkInfoRouter.get("/paymentreceipt/networkinfo", async (req,res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const networkinfoDoc = await NetworkInfoDB.read(payment_receipt_idx);
+        // const payment_receipt_idx =  req.body.payment_receipt_idx;
+        const networkinfoDoc = await NetworkInfoDB.read(req.body);
         console.log("networkinfoDoc: ", networkinfoDoc);
         res.status(200).json({
             message: "networkinfo read 성공시 1, 실패시 -1",
@@ -49,8 +49,8 @@ NetworkInfoRouter.patch('/paymentreceipt/networkinfo', async (req, res) => {
 
 NetworkInfoRouter.delete('/paymentreceipt/networkinfo', async (req, res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const result = await NetworkInfoDB.delete(payment_receipt_idx);
+        // const payment_receipt_idx =  req.body.payment_receipt_idx;
+        const result = await NetworkInfoDB.delete(req.body);
         res.status(200).json({
             message: "networkinfo delete 성공시 1, 실패시 -1",
             data: result,

@@ -18,13 +18,15 @@ const db = admin.firestore();
 // const consumerDB = {
 module.exports = {
     // consumer 데이터 생성하는 함수
-    async createConsumer(consumerId, consumerNickname) {
+    async createConsumer(datas) {
         // 접근 db table name: consumer
         // consumer db table column: consumer_id[pk], consumer_nickname
       
         // consumerId : 소비자 아이디
         // consumerNickname : 소비자 별명
-    
+        const consumerId = datas.consumer_id;
+        const consumerNickname = datas.consumer_nickname;
+
         const data = {
           consumer_id: consumerId,
           consumer_nickname: consumerNickname,
@@ -41,13 +43,15 @@ module.exports = {
     },
       
     // consumer name 읽어오는 함수
-    async readConsumer(consumerId) {
+    async readConsumer(datas) {
         // 접근 db table name: consumer
         // consumer db table column: consumer_id[pk], consumer_nickname
     
         // consumerId : 소비자 아이디
-    
+        const consumerId = datas.consumer_id;
+
         try {
+            console.log(consumerId);
             const docRef = await db.collection('consumer').doc(consumerId).get();
             if (docRef.exists) {
                 const data = docRef.data();
@@ -62,13 +66,15 @@ module.exports = {
     },
       
     // consumer name 수정하는 함수
-    async updateConsumer(consumerId, consumerNickname) {
+    async updateConsumer(datas) {
         // 접근 db table name: consumer
         // consumer db table column: consumer_id[pk], consumer_nickname
     
         // consumerId : 소비자 아이디
         // consumerNickname : 소비자 별명
-    
+        const consumerId = datas.consumer_id;
+        const consumerNickname = datas.consumer_nickname;
+
         try {
             await db.collection('consumer').doc(consumerId).update({
                 consumer_nickname: consumerNickname,
@@ -82,12 +88,13 @@ module.exports = {
     },
       
     // consumer 데이터 삭제하는 함수
-    async deleteConsumer(consumerId) {
+    async deleteConsumer(datas) {
         // 접근 db table name: consumer
         // consumer db table column: consumer_id[pk], consumer_nickname
     
         // consumerId : 소비자 아이디
-    
+        const consumerId = datas.consumer_id;
+
         try {
             await db.collection('consumer').doc(consumerId).delete();
     

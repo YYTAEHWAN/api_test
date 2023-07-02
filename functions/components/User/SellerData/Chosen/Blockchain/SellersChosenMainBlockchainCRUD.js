@@ -19,22 +19,25 @@ const db = admin.firestore();
 
 // const sellersChosenMainBlockchainDB = {
 module.exports = {
-
+  
   // seller가 선택한 메인 블록체인 네트워크 정보 테이블에 데이터를 생성하는 함수
-  async createSellersChosenMainBlockchain(sellerId, mainBlockchainIdx) {
+  async create(datas) {
       // 접근 db table name: sellers_chosen_main_blockchain
       // sellers_chosen_main_blockchain db table column: seller_id[pk], main_blockchain_idx[pk]
   
       // sellerId : 판매자 아이디
       // mainBlockchainIdx : 판매자가 선택한 메인 블록체인 인덱스
-  
+
+      const sellerId = datas.seller_id;
+      const mainBlockchainIdx = datas.main_blockchain_idx;
+
       const data = {
           seller_id: sellerId,
           main_blockchain_idx: mainBlockchainIdx,
       };
   
       const docName = `${sellerId}_blockchain_idx${mainBlockchainIdx}`;
-  
+      
       try {
           // sellers_chosen_main_blockchain 컬렉션에 새로운 문서 생성
           await db.collection('sellers_chosen_main_blockchain').doc(docName).set(data);
@@ -69,12 +72,13 @@ module.exports = {
   // }
   
   // seller가 선택한 메인 블록체인 네트워크 정보 테이블에서 데이터를 모두 읽어오는 함수
-  async readSellersChosenMainBlockchain(sellerId) {
+  async read(datas) {
       // 접근 db table name: sellers_chosen_main_blockchain
     // sellers_chosen_main_blockchain db table column: seller_id[pk], main_blockchain_idx[pk]
   
       // sellerId : 판매자 아이디
-  
+      const sellerId = datas.seller_id;
+      
       try {
         const sellersChosenMainBlockchainRef = db.collection('sellers_chosen_main_blockchain');
     
@@ -85,9 +89,10 @@ module.exports = {
           const docName = doc.id;
           const sellerIdFromDoc = docName.split('_')[0];
           const mainBlockchainIdx = docName.split('_')[2];
+          const mainBlockchainIdxOnly = mainBlockchainIdx.split('x')[1];
           
           if (sellerIdFromDoc === sellerId) {
-            mainBlockchainIdxList.push(mainBlockchainIdx);
+            mainBlockchainIdxList.push(mainBlockchainIdxOnly);
           }
         });
     
@@ -101,13 +106,15 @@ module.exports = {
   // 복합키라서 수정은 안됨
   
   // seller가 선택한 메인 블록체인 네트워크 정보 테이블에서 데이터를 삭제하는 함수
-  async deleteSellersChosenMainBlockchain(sellerId, mainBlockchainIdx) {
+  async delete(datas) {
     // 접근 db table name: sellers_chosen_main_blockchain
     // sellers_chosen_main_blockchain db table column: seller_id[pk], main_blockchain_idx[pk]
   
     // sellerId : 판매자 아이디
     // mainBlockchainIdx : 판매자가 삭제하기 위해 선택한 메인 블록체인 인덱스
-  
+    const sellerId = datas.seller_id;
+    const mainBlockchainIdx = datas.main_blockchain_idx;
+
     try {
       const docName = `${sellerId}_blockchain_idx${mainBlockchainIdx}`;
       const docRef = db.collection("sellers_chosen_main_blockchain").doc(docName);

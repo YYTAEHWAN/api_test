@@ -5,9 +5,11 @@ const sellersChosenWalletDB = require("../../../User/SellerData/Chosen/Wallet/Se
 // 3. 판매자 지갑 관리(판매자가 사용하기로 선택한 지갑 리스트를 보기)
 module.exports = {
   
-  async readSellersChosenWallet(input_seller_id) {
+  async read(datas) {
+    const input_seller_id = datas.seller_id;
+
     try {
-      const result = await sellersChosenWalletDB.readSellersChosenWallet(input_seller_id);
+      const result = await sellersChosenWalletDB.read(datas);
       console.log("result : " + result);
       return result; // 선택한 지갑 번호(idx) 리스트 리턴
     } catch (error) {
@@ -17,12 +19,13 @@ module.exports = {
   },
 
   // 판매자 지갑 관리(판매자가 삭제하기로 한 지갑을 삭제)
-  async deleteSellersChosenWallet(input_seller_id, input_crypto_wallet_idx) {
+  async delete(datas) {
+    const input_seller_id = datas.seller_id;
+    const input_crypto_wallet_idx = datas.crypto_wallet_idx;
+    console.log("input_seller_id : " + input_seller_id);
+    
     try {
-      const result = await sellersChosenWalletDB.deleteSellersChosenWallet(
-        input_seller_id,
-        input_crypto_wallet_idx
-      );
+      const result = await sellersChosenWalletDB.delete(datas);
       return result; // 1: 성공, -1: 실패
     } catch (error) {
       console.error(error);

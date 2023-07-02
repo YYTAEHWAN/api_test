@@ -56,21 +56,17 @@ module.exports = {
         
         
         try {
-            console.log("PriceAddressInfoDB.create 시작 1 ");
             // 데이터가 이미 존재하는지 확인
             const doc = await db.collection('payment_receipt_price_address_info').doc(String(datas.payment_receipt_idx)).get();
-            console.log("PriceAddressInfoDB.create 시작 2 ");
             if (doc.exists) {
                 console.log('이미 데이터가 존재합니다.');
                 return -1; // 실패
             } else {
-                console.log("PriceAddressInfoDB.create 시작 3 ");
-                console.log("datas: ", datas);
                 // payment_receipt_price_address_info 컬렉션에 새로운 문서 생성
                 await db.collection('payment_receipt_price_address_info')
                 .doc(String(datas.payment_receipt_idx))
                 .set(datas);
-                console.log("PriceAddressInfoDB.create 정상종료");
+                // console.log("PriceAddressInfoDB.create 정상종료");
                 return 1; // 성공
             }
         } catch (error) {
@@ -81,11 +77,12 @@ module.exports = {
     },
 
     // payment_receipt_price_address_info 데이터 읽어오는 함수
-    async read(payment_receipt_idx) {
+    async read(datas) {
         // 접근 db table name: payment_receipt_price_address_info
         // payment_receipt_price_address_info db table column: payment_receipt_idx[pk], total_coin_price, sender_consumer_id, receiver_seller_id, sender_wallet_address, receiver_wallet_address
 
         // payment_receipt_idx : 결제 영수증 식별 idx
+        const payment_receipt_idx = datas.payment_receipt_idx;
 
         try {
             // 데이터가 이미 존재하는지 확인
@@ -116,15 +113,15 @@ module.exports = {
         // sender_wallet_address : 발신자 지갑 주소
         // receiver_wallet_address : 수신자 지갑 주소
 
-        const data = {
-            payment_receipt_idx : datas.payment_receipt_idx,
-            total_coin_price : datas.total_coin_price,
-            total_won_price : datas.total_won_price,
-            sender_consumer_id : datas.sender_consumer_id,
-            receiver_seller_id : datas.receiver_seller_id,
-            sender_wallet_address : datas.sender_wallet_address,
-            receiver_wallet_address : datas.receiver_wallet_address
-        }
+        // const data = {
+        //     payment_receipt_idx : datas.payment_receipt_idx,
+        //     total_coin_price : datas.total_coin_price,
+        //     total_won_price : datas.total_won_price,
+        //     sender_consumer_id : datas.sender_consumer_id,
+        //     receiver_seller_id : datas.receiver_seller_id,
+        //     sender_wallet_address : datas.sender_wallet_address,
+        //     receiver_wallet_address : datas.receiver_wallet_address
+        // }
         try {
             // 데이터가 이미 존재하는지 확인
             const doc = await db.collection('payment_receipt_price_address_info').doc(String(datas.payment_receipt_idx)).get();
@@ -149,11 +146,12 @@ module.exports = {
     },
 
     // payment_receipt_price_address_info 데이터 삭제하는 함수
-    async delete(payment_receipt_idx) {
+    async delete(datas) {
         // 접근 db table name: payment_receipt_price_address_info
         // payment_receipt_price_address_info db table column: payment_receipt_idx[pk], total_coin_price, sender_consumer_id, receiver_seller_id, sender_wallet_address, receiver_wallet_address
 
         // payment_receipt_idx : 결제 영수증 식별 idx
+        const payment_receipt_idx = datas.payment_receipt_idx;
 
         try {
             // 데이터가 이미 존재하는지 확인

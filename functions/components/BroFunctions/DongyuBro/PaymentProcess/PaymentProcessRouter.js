@@ -18,23 +18,20 @@ PaymentProcessRouter.post('/paymentprocess/startsetting', async (req, res) => {
     }
 });
 
-PaymentProcessRouter.post('/paymentprocess/preparePayment', async (req, res) => {
+PaymentProcessRouter.post('/paymentprocess/storepaymentdata', async (req, res) => {
     try {
-        console.log("paymentreceiptidx: ", req.body.payment_receipt_idx);
-        console.log("sellerId : ", req.body.seller_id);
-        console.log("consumerId : ", req.body.consumer_id);
-        console.log("products : ", req.body.products);
-        console.log("seller_wallet_address : ", req.body.seller_wallet_address);
-        console.log("consumer_wallet_address : ", req.body.consumer_wallet_address);
-        
-        const result = await PaymentProcessFuncs.preparePayment(req.body);
+        // console.log("paymentreceiptidx: ", req.body.payment_receipt_idx);
+        // console.log("priceaddressinfo_obejct : ", req.body.priceaddressinfo_obejct);
+        // console.log("networkInfo_obejct : ", req.body.networkInfo_obejct);
+
+        const result = await PaymentProcessFuncs.storePaymentData(req.body);
 
         res.status(200).json({
-            message: "preparePayment 성공시 1111, 실패시 -1",
+            message: "storePaymentData 성공시 1111, 실패시 -1",
             data: result,
         });
     } catch (error) {
-        res.status(400).send(error.message+"/ preparePayment 실패");
+        res.status(400).send(error.message+"/ storePaymentData 실패");
     }
 });
 

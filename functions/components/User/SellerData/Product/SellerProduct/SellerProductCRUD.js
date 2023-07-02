@@ -20,19 +20,21 @@ const db = admin.firestore();
 // const sellerProductsDB = {
 module.exports = {
   // seller_products 데이터 생성하는 함수
-  async createSellerProducts(sellerId, productInfoIdx) {
+  async create(datas) {
     // 접근 db table name : seller_products
     // seller_products db table column : seller_id[pk], product_info_idx[pk]
 
     // sellerId : 로그인 확인이 완료된 아이디(다른 사람이 판매자의 id로 데이터를 집어넣을 수 없어야 하는 기능 필요 - 이건 나중에 추가)
     // productInfoIdx : 판매하려는 제품의 idx
+    const seller_id = datas.seller_id;
+    const product_info_idx = datas.product_info_idx;
 
     const sellerProductsData = {
-      seller_id: sellerId,
-      product_info_idx: productInfoIdx,
+      seller_id: seller_id,
+      product_info_idx: product_info_idx,
     };
 
-    const docName = `${sellerId}_product_info_idx${productInfoIdx}`;
+    const docName = `${seller_id}_product_info_idx${product_info_idx}`;
 
     try {
       // seller_products 컬렉션에 새로운 문서 생성
@@ -43,16 +45,19 @@ module.exports = {
       return -1; // 실패
     }
   },
-
+  
   // seller_products 데이터(판매자 id, 판매 제품 idx) 읽어오는 함수
-  async readSellerProducts(sellerId, productInfoIdx) {
+  async read(datas) {
     // 접근 db table name : seller_products
     // seller_products db table column : seller_id[pk], product_info_idx[pk]
 
     // sellerId : 로그인 확인이 완료된 아이디
     // productInfoIdx : 판매하려는 제품의 idx
 
-    const docName = `${sellerId}_product_info_idx${productInfoIdx}`;
+    const seller_id = datas.seller_id;
+    const product_info_idx = datas.product_info_idx;
+
+    const docName = `${seller_id}_product_info_idx${product_info_idx}`;
 
     try {
       const docRef = await db.collection("seller_products").doc(docName).get();
@@ -61,23 +66,26 @@ module.exports = {
         return data; // 문서 데이터 반환
       } else {
         console.log("문서가 존재하지 않습니다.");
-        return null;
+        return -1;
       }
     } catch (error) {
       console.error("데이터 읽기 실패:", error);
-      return null;
+      return -1;
     }
   },
-
+  
   // seller_products의 제품(product_info_idx) 삭제 함수
-  async deleteSellerProducts(sellerId, productInfoIdx) {
+  async delete(datas) {
     // 접근 db table name : seller_products
     // seller_products db table column : seller_id[pk], product_info_idx[pk]
 
     // sellerId : 로그인 확인이 완료된 아이디
     // productInfoIdx : 삭제할 제품의 idx
 
-    const docName = `${sellerId}_product_info_idx${productInfoIdx}`;
+    const seller_id = datas.seller_id;
+    const product_info_idx = datas.product_info_idx;
+
+    const docName = `${seller_id}_product_info_idx${product_info_idx}`;
 
     try {
       const docRef = db.collection("seller_products").doc(docName);

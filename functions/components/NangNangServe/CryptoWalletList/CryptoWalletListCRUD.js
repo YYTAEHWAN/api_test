@@ -32,12 +32,12 @@ const db = admin.firestore();
 // const cryptoWalletListDB = {
 module.exports = {
   // 낭낭이 제공하는 크립토 월렛 리스트를 만드는 함수
-  async createCryptoWalletList( input_crypto_wallet_name ) {
+  async create(datas) {
       // 접근 db 이름 : nangnang_crypto_wallet_list
       // 접근 db 칼럼 이름들 : idx[pk], name
   
       // input_crypto_wallet_name : 낭낭이 서비스하기 위해 추가하려는 크립토 월렛의 이름
-      
+      const input_crypto_wallet_name = datas.crypto_wallet_name;
       try {
           const cryptoWalletListRef = db.collection('nangnang_crypto_wallet_list');
       
@@ -74,7 +74,7 @@ module.exports = {
   },
   
   // 낭낭이 제공하는 크립토 월렛 리스트를 읽어오는 함수
-  async readCryptoWalletList() {
+  async read() {
       // 접근 db 이름 : nangnang_crypto_wallet_list
       // 접근 db 칼럼 이름들 : idx[pk], name
   
@@ -91,7 +91,7 @@ module.exports = {
           // cryptoWalletList.push(data.name);
   
           const docName = doc.id;
-          const walletIdx = docName.split('_')[1];
+          const walletIdx = docName.split('_')[1].split('x')[1];
           const walletName = data.name;
           myDict[walletIdx] = walletName;
   
@@ -106,24 +106,27 @@ module.exports = {
 
     // 이건 아직 테스트 안해봄 이건 아직 테스트 안해봄 이건 아직 테스트 안해봄
    // 인덱스를 넣으면 낭낭이 제공하는 크립토 월렛의 이름을 제공하는 함수
-   async readOneCryptoWalletName(walletIdx$) {
+   async readOneNameByIdx(datas) {
     // 접근 db 이름 : nangnang_crypto_wallet_list
     // 접근 db 칼럼 이름들 : idx[pk], name
+    const walletIdx$ = datas.wallet_idx;
 
     try {
       const cryptoWalletListRef = db.collection('nangnang_crypto_wallet_list');
   
       const snapshot = await cryptoWalletListRef.get();
       
-      snapshot.forEach((doc) => {
+      for (const doc of snapshot.docs) {
         const data = doc.data();
-
         const docName = doc.id;
-        const walletIdx = docName.split('_')[1];
-        if(`idx${walletIdx$}` === walletIdx) {
+        const walletIdx = docName.split('_')[1].split('x')[1];
+
+        const walletIdxInt = parseInt(walletIdx);
+        const compareWalletidxInt = parseInt(walletIdx$);
+        if(compareWalletidxInt === walletIdxInt) {
           return data.name; // walletIdx$에 해당하는 크립토 월렛의 이름 리턴
         }
-      });
+      }
       console.log("해당하는 idx의 크립토 월렛 없음");
       return -1; // 실패 해당하는 idx의 크립토 월렛 없음
     } catch (error) {
@@ -131,15 +134,49 @@ module.exports = {
       return -1;
     }
 },
-  
+
+    // 크립토 월렛 이름을 넣으면 해당 인덱스를 제공하는 함수
+    async readOneIdxByName(datas) {
+      // 접근 db 이름 : nangnang_crypto_wallet_list
+      // 접근 db 칼럼 이름들 : idx[pk], name
+      const walletName = datas.crypto_wallet_list;
+
+      try {
+        const cryptoWalletListRef = db.collection('nangnang_crypto_wallet_list');
+
+        const snapshot = await cryptoWalletListRef.get();
+        
+        for (const doc of snapshot.docs) {
+          const data = doc.data();
+          const docName = doc.id;
+          const walletIdx = docName.split('_')[1].split('x')[1];
+
+          const dbwalletName = data.name;
+          const dbwalletNameLowerCaseAndToString = dbwalletName.toLowerCase().toString();
+          const walletNameLowerCaseAndToString = walletName.toLowerCase().toString();
+
+          if(dbwalletNameLowerCaseAndToString === walletNameLowerCaseAndToString) {
+            return walletIdx; // 이름에 해당하는 크립토 월렛의 walletIdx 리턴
+          }
+        }
+        console.log("해당하는 Name의 크립토 월렛 없음");
+        return -1; // 실패 해당하는 idx의 크립토 월렛 없음
+      } catch (error) {
+        console.error('데이터 읽기 실패:', error);
+        return -1;
+      }
+    },
+    
   // 낭낭이 제공하는 크립토 월렛 리스트를 수정하는 함수
-  async updateCryptoWalletList( wallet_idx$ , modifiedCryptoWalletName) {
+  async update(datas) {
       // 접근 db 이름 : nangnang_crypto_wallet_list
       // 접근 db 칼럼 이름들 : idx[pk], name
   
       // wallet_idx$ : 수정할 크립토 월렛의 인덱스(idx)
       // modified_crypto_wallet_name : 수정된 크립토 월렛의 이름
-      
+      const wallet_idx$ = datas.wallet_idx;
+      const modifiedCryptoWalletName = datas.crypto_wallet_name;
+
       try {
         const docName = `wallet_idx${wallet_idx$}`;
         // console.log("wallet_idx${wallet_idx$}값은 "+ `wallet_idx${wallet_idx$}`);
@@ -160,14 +197,15 @@ module.exports = {
       }
     },
   
-  
+    
   // 낭낭이 제공하는 크립토 월렛 리스트를 삭제하는 함수
-  async deleteCryptoWalletList(wallet_idx$) {
+  async delete(datas) {
       // 접근 db 이름 : nangnang_crypto_wallet_list
       // 접근 db 칼럼 이름들 : idx[pk], name
   
       // wallet_idx$ : 삭제할 크립토 월렛의 인덱스(idx)
-  
+      const wallet_idx$ = datas.wallet_idx;
+
       try {
         const docName = `wallet_idx${wallet_idx$}`;
         // console.log("wallet_idx${wallet_idx$}값은 "+ wallet_idx$);

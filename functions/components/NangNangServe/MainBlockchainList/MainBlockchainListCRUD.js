@@ -23,12 +23,15 @@ const db = admin.firestore();
 
 // const mainBlockchainListDB = {
 module.exports = {
+  
   // 낭낭이 제공하는 메인 블록체인 리스트를 생성하는 함수
-  async createMainBlockchainList(inputMainBlockchainName) {
+  async create(datas) {
     // 접근 db 이름: nangnang_main_blockchain_list
     // 접근 db 칼럼 이름들: idx[pk], name
   
     // inputMainBlockchainName: 낭낭이 서비스에 추가할 메인 블록체인의 이름
+    const inputMainBlockchainName = datas.main_blockchain_name;
+    console.log("inputMainBlockchainName 값은 "+ inputMainBlockchainName);
     try {
       const mainBlockchainListRef = db.collection('nangnang_main_blockchain_list');
   
@@ -48,7 +51,8 @@ module.exports = {
   
       // 새로운 문서의 idx 값 = 문서 개수 + 1
       const newIdxValue = docCount + 1;
-      const docName = `blockchain_idx${newIdxValue}`;
+      console.log("newIdxValue 값은 "+ newIdxValue);
+      const docName = `main_blockchain_idx${newIdxValue}`;
   
       const data = {
         name: inputMainBlockchainName,
@@ -65,7 +69,7 @@ module.exports = {
   },
   
   // 낭낭이 제공하는 메인 블록체인 리스트를 읽어오는 함수
-  async readMainBlockchainList() {
+  async read() {
     // 접근 db 이름: nangnang_main_blockchain_list
     // 접근 db 칼럼 이름들: idx[pk], name
     try {
@@ -78,8 +82,11 @@ module.exports = {
         const data = doc.data();
   
         const docName = doc.id;
-        const BlockchainIdx = docName.split('_')[1];
+        const BlockchainIdx = docName.split('_')[2].split('x')[1];
         const BlockchainName = data.name;
+        console.log("BlockchainIdx 값은 "+ BlockchainIdx);
+        console.log("BlockchainName 값은 "+ BlockchainName);
+
         IdxNameDict[BlockchainIdx] = BlockchainName;
   
       });
@@ -92,15 +99,114 @@ module.exports = {
   
   },
   
+
+    // 인덱스를 넣으면 낭낭이 제공하는 메인블록체인 이름을 제공하는 함수
+    async readChainNameByIdx(datas) {
+      // 접근 db 이름 : nangnang_main_blockchain_list
+      // 접근 db 칼럼 이름들 : idx[pk], name
+
+      const blockchain_idx$ = datas.blockchain_idx;
+
+      try {
+        const mainBlockchainListRef = db.collection('nangnang_main_blockchain_list');
+    
+        const snapshot = await mainBlockchainListRef.get();
+        
+        for (const doc of snapshot.docs) {
+          const data = doc.data();
+          const docName = doc.id;
+          const chainIdx = docName.split('_')[2].split('x')[1];
+
+          const mainChainIdxInt = parseInt(chainIdx);
+          const compareWalletidxInt = parseInt(blockchain_idx$);
+          if(compareWalletidxInt === mainChainIdxInt) {
+            return data.name; // walletIdx$에 해당하는 크립토 월렛의 이름 리턴
+          }
+        }
+        console.log("해당하는 idx의 메인 블록체인이 없음");
+        return -1; // 실패 해당하는 idx의 크립토 월렛 없음
+      } catch (error) {
+        console.error('데이터 읽기 실패:', error);
+        return -1;
+      }
+  },
+
+    // 메인 블록체인 이름을 넣으면 해당 인덱스를 제공하는 함수
+    async readChainIdxByName(datas) {
+
+      const mainBlockchainName = datas.main_blockchain_name;
+
+      try {
+        const mainBlockchainListRef = db.collection('nangnang_main_blockchain_list');
+    
+        const snapshot = await mainBlockchainListRef.get();
+        
+        for (const doc of snapshot.docs) {
+          const data = doc.data();
+          const docName = doc.id;
+          const chainIdx = docName.split('_')[2].split('x')[1];
+
+          const dbchainName = data.name;
+          const dbchainNameLowerCaseAndToString = dbchainName.toLowerCase().toString();
+          const chainNameLowerCaseAndToString = mainBlockchainName.toLowerCase().toString();
+
+          if(dbchainNameLowerCaseAndToString === chainNameLowerCaseAndToString) {
+            return chainIdx; // 이름에 해당하는 메인 블록체인의 chainIdx 리턴
+          }
+        }
+        console.log("해당하는 Name의 메인 블록체인 없음");
+        return -1; // 실패 해당하는 idx의 메인 블록체인  없음
+      } catch (error) {
+        console.error('데이터 읽기 실패:', error);
+        return -1;
+      }
+    },
+
+
+    // idx를 넣으면 해당 크립토 월렛의 이름을 제공하는 함수
+    async readOneIdxByName(datas) {
+      // 접근 db 이름 : nangnang_crypto_wallet_list
+      // 접근 db 칼럼 이름들 : idx[pk], name
+      const walletName = datas.crypto_wallet_list;
+
+      try {
+        const cryptoWalletListRef = db.collection('nangnang_crypto_wallet_list');
+
+        const snapshot = await cryptoWalletListRef.get();
+        
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+
+          const docName = doc.id;
+          const walletIdx = docName.split('_')[1].split('x')[1];
+          const dbwalletName = data.name;
+          const dbwalletNameLowerCaseAndToString = dbwalletName.toLowerCase().toString();
+          const walletNameLowerCaseAndToString = walletName.toLowerCase().toString();
+
+          if(dbwalletNameLowerCaseAndToString === walletNameLowerCaseAndToString) {
+            return walletIdx; // walletIdx$에 해당하는 크립토 월렛의 이름 리턴
+          }
+        }); 
+        console.log("해당하는 Name의 크립토 월렛 없음");
+        return -1; // 실패 해당하는 idx의 크립토 월렛 없음
+      } catch (error) {
+        console.error('데이터 읽기 실패:', error);
+        return -1;
+      }
+    },
+
+
   // 낭낭이 제공하는 메인 블록체인 리스트를 수정하는 함수
-  async updateMainBlockchainList( blockchain_idx$, modifiedMainBlockchainName) {
+  async update(datas) {
     // 접근 db 이름: nangnang_main_blockchain_list
     // 접근 db 칼럼 이름들: idx[pk], name
   
     // blockchain_idx$: 수정할 메인 블록체인의 인덱스(idx)
     // modifiedMainBlockchainName: 수정된 메인 블록체인의 이름
+    const blockchain_idx$ = datas.blockchain_idx;
+    const modifiedMainBlockchainName = datas.main_blockchain_name;
     try {
-      const docName = `blockchain_idx${blockchain_idx$}`;
+      const docName = `main_blockchain_idx${blockchain_idx$}`;
       // console.log("blockchain_idx${blockchain_idx$}값은 "+ `blockchain_idx${blockchain_idx$}`);
       const mainBlockchainListRef = db.collection('nangnang_main_blockchain_list');
   
@@ -121,14 +227,14 @@ module.exports = {
   
   
   // 낭낭이 제공하는 메인 블록체인 리스트를 삭제하는 함수
-  async deleteMainBlockchainList(blockchain_idx$) {
+  async delete(datas) {
     // 접근 db 이름: nangnang_main_blockchain_list
     // 접근 db 칼럼 이름들: idx[pk], name
   
     // inputMainBlockchainName: 삭제할 메인 블록체인의 이름
-  
+    const blockchain_idx$ = datas.blockchain_idx;
     try {
-      const docName = `blockchain_idx${blockchain_idx$}`;
+      const docName = `main_blockchain_idx${blockchain_idx$}`;
       // console.log("blockchain_idx${blockchain_idx$}값은 "+ blockchain_idx$);
       const mainBlockchainListRef = db.collection('nangnang_main_blockchain_list');
   

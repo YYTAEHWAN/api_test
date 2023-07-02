@@ -57,7 +57,9 @@ module.exports =  {
     }
   },
 
-  async read(payment_receipt_idx) {
+  async read(datas) {
+    const payment_receipt_idx = datas.payment_receipt_idx;
+
     try {
       const doc = await db
         .collection('payment_receipt_network_info')
@@ -102,7 +104,8 @@ module.exports =  {
     }
   },
 
-  async delete(payment_receipt_idx) {
+  async delete(datas) {
+    const payment_receipt_idx = datas.payment_receipt_idx;
     try {
       const doc = await db
         .collection('payment_receipt_network_info')

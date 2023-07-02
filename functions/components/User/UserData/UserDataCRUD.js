@@ -30,7 +30,7 @@ const db = admin.firestore();
 
 module.exports = {
   // user_data 데이터 생성하는 함수
-  async createUserData(user_datas) {
+  async createUserData(datas) {
     // 접근 db table name : user_data
     // user_data db table column : id[pk], password, consumer_or_not, email, real_name, phone_number, resident_registration_number
 
@@ -52,11 +52,11 @@ module.exports = {
     //   resident_registration_number: resident_registration_number,
     // };
 
-    console.log(user_datas)
-
+    console.log(datas)
+    const id = datas.id;
     try {
       // user_data 컬렉션에 새로운 문서 생성
-      await db.collection("user_data").doc(user_datas.id).set(user_datas);
+      await db.collection("user_data").doc(id).set(datas);
       return 1; // 성공
     } catch (error) {
       console.error("데이터 생성 실패:", error);
@@ -65,12 +65,13 @@ module.exports = {
   },
 
   // user_data 데이터 읽어오는 함수
-  async readUserData(id) {
+  async readUserData(datas) {
     // 접근 db table name : user_data
     // user_data db table column : id[pk], password, consumer_or_not, email, real_name, phone_number, resident_registration_number
 
     // id : 사용자가 입력한 아이디
-
+    const id = datas.id;
+    
     try {
         // user_data 컬렉션에서 해당 문서 가져오기
         const doc = await db.collection("user_data").doc(id).get();
@@ -90,7 +91,7 @@ module.exports = {
   },
 
   // user_data 데이터 수정하는 함수
-  async updateUserData(input_id, modified_user_datas) {
+  async updateUserData(datas) {
     // 접근 db table name : user_data
     // user_data db table column : id[pk], password, consumer_or_not, email, real_name, phone_number, resident_registration_number
 
@@ -100,7 +101,13 @@ module.exports = {
     // email : 사용자가 입력한 이메일
     // real_name : 사용자가 입력한 실명
     // phone_number : 사용자가 입력한 전화번호
-
+    const input_id = datas.id;
+    const modified_user_datas = {
+      password: datas.password,
+      email: datas.email,
+      real_name: datas.real_name,
+      phone_number: datas.phone_number,
+    };
     try {
         // user_data 컬렉션에서 해당 문서 가져오기
         const docRef = db.collection("user_data").doc(input_id);
@@ -108,12 +115,7 @@ module.exports = {
     
         if (doc.exists) {
           // 문서가 존재하는 경우 데이터 수정
-          await docRef.update({
-            password: modified_user_datas.password,
-            email: modified_user_datas.email,
-            real_name: modified_user_datas.real_name,
-            phone_number: modified_user_datas.phone_number,
-          });
+          await docRef.update(modified_user_datas);
     
           // 수정된 데이터 가져오기
           const updatedDoc = await docRef.get();
@@ -131,13 +133,13 @@ module.exports = {
   },
 
   // user_data 데이터 삭제하는 함수
-  async deleteUserData(id) {
+  async deleteUserData(datas) {
     // 접근 db table name : user_data
     // user_data db table column : id[pk], password, consumer_or_not, email, real_name, phone_number, resident_registration_number
 
     // id : 사용자가 입력한 아이디
 
-
+    const id = datas.id;
     try {
         // user_data 컬렉션에서 해당 문서 삭제
         await db.collection("user_data").doc(id).delete();

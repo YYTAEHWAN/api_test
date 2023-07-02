@@ -17,12 +17,14 @@ const db = admin.firestore();
 // const sellerDB = {
 module.exports = {
   // seller 데이터 생성하는 함수
-  async createSeller(input_seller_id, input_platform_name) {
+  async create(datas) {
     // 접근 db table name : seller
     // seller db table column : seller_id[pk], platform_name
 
     // input_seller_id : 판매자 아이디
     // input_platform_name : 판매자 플랫폼 이름
+    const input_seller_id = datas.seller_id;
+    const input_platform_name = datas.platform_name;
 
     const sellerData = {
       seller_id: input_seller_id,
@@ -40,11 +42,12 @@ module.exports = {
   },
 
   // seller platform_name 읽어오는 함수
-  async readSeller(input_seller_id) {
+  async readPlatformName(datas) {
     // 접근 db table name : seller
     // seller db table column : seller_id[pk], platform_name
 
     // input_seller_id : 판매자 아이디
+    const input_seller_id = datas.seller_id;
 
     try {
       // seller 컬렉션에서 해당 문서 가져오기
@@ -63,12 +66,15 @@ module.exports = {
   },
 
   // seller platform_name 수정하는 함수
-  async updateSeller(input_seller_id, modified_platform_name) {
+  async update(datas) {
     // 접근 db table name : seller
     // seller db table column : seller_id[pk], platform_name
 
     // input_seller_id : 수정할 판매자 아이디
     // modified_platform_name : 수정된 플랫폼 이름
+
+    const input_seller_id = datas.seller_id;
+    const modified_platform_name = datas.platform_name;
 
     try {
       // seller 컬렉션에서 해당 문서 가져오기
@@ -93,12 +99,13 @@ module.exports = {
   },
 
   // seller 데이터 삭제하는 함수
-  async deleteSeller(input_seller_id) {
+  async delete(datas) {
     // 접근 db table name : seller
     // seller db table column : seller_id[pk], platform_name
 
     // input_seller_id : 판매자 아이디
-
+    const input_seller_id = datas.seller_id;
+    
     try {
       // seller 컬렉션에서 해당 문서 삭제
       await db.collection("seller").doc(input_seller_id).delete();

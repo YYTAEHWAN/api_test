@@ -25,16 +25,19 @@ const sellerDB = require("../../../User/SellerData/SellerCRUD");
 module.exports = {
   
   // 1. 판매자 정보(내정보) 가져오기
-  async getSellerData(seller_id) {
+  async getSellerData(datas) {
     // 접근 db table name : user_data, seller
     // user_data db table column : id[pk], password, consumer_or_not, email, real_name, phone_number, resident_registration_number
     // seller db table column : seller_id[pk], seller_platform_name
 
     // seller_id : 사용자가 입력한 아이디
-
+    const seller_id = datas.seller_id;
+    const user_data_for_read = {
+      id: seller_id,
+    }
     try {
       // 1단계 : user_data db에서 정보 읽어오기
-      const userData = await userDataDB.readUserData(seller_id);
+      const userData = await userDataDB.readUserData(user_data_for_read);
 
       const sellerDataObject = {
         id: userData.id,
@@ -48,7 +51,7 @@ module.exports = {
 
       if (sellerDataObject.consumer_or_not === 0) {
         // seller라면 seller db에서 정보 읽어오기
-        const sellerDataPlatformName = await sellerDB.readSeller(seller_id);
+        const sellerDataPlatformName = await sellerDB.readPlatformName(datas);
         if (sellerDataPlatformName !== -1) {
           sellerDataObject.platform_name = sellerDataPlatformName;
           console.log("판매자 정보 조회 완료");
@@ -67,16 +70,3 @@ module.exports = {
   }
 
 }
-
-
-
-/*
-
-// 5. 결제 내역 (근데 이제 결제 기간을 곁들인...)
-// 이건 나중에 구현하자
-
-// 요런 느낌 으로 가져오기 (gpt한테 물어본 거)
-// SELECT *
-// FROM payment_receipt_status_info
-// WHERE payment_end_time >= '2023-05-01' AND payment_start_time <= '2023-05-20'
-*/

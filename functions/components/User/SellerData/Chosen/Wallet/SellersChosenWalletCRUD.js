@@ -21,20 +21,23 @@ const db = admin.firestore();
 // const sellersChosenWalletDB = {
 module.exports = {
   // sellet가 선택한 크립토 지갑들 정보 테이블에 데이터를 생성(추가)하는 함수
-  async createSellersChosenWallet(sellerId, cryptoWalletIdx) {
+  async create(datas) {
       // 접근 db table name: sellers_chosen_wallet
       // sellers_chosen_wallet db table column: seller_id[pk], crypto_wallet_idx[pk]
   
       // sellerId : 판매자 아이디
       // cryptoWalletIdx : 판매자가 사용할 월렛 idx
-  
-      const docName = `${sellerId}_wallet_idx${cryptoWalletIdx}`;
-  
-      const sellersChosenWalletData = {
-          seller_id: sellerId,
-          crypto_wallet_idx: cryptoWalletIdx,
-      };
+      const sellerId = datas.seller_id;
+      const cryptoWalletIdx = datas.crypto_wallet_idx;
+
       try {
+          const docName = `${sellerId}_wallet_idx${cryptoWalletIdx}`;
+      
+          const sellersChosenWalletData = {
+              seller_id: sellerId,
+              crypto_wallet_idx: cryptoWalletIdx,
+          };
+
           const sellersChosenWalletRef = db.collection("sellers_chosen_wallet");
   
           // sellers_chosen_wallet 컬렉션에 새로운 문서 생성
@@ -48,13 +51,14 @@ module.exports = {
   },
   
   // seller가 선택한 크립토 지갑들 정보 테이블에서 데이터를 모두 읽어오는 함수
-  async readSellersChosenWallet(sellerId) {
+  async read(datas) {
     // 접근 db table name: sellers_chosen_wallet
     // sellers_chosen_wallet db table column: seller_id[pk], crypto_wallet_idx[pk]
   
     // sellerId : 판매자 아이디
     // cryptoWalletIdx : 판매자가 사용할 월렛 idx
-  
+    
+    const sellerId = datas.seller_id;
     try {
       const sellersChosenWalletRef = db.collection('sellers_chosen_wallet');
   
@@ -65,9 +69,10 @@ module.exports = {
         const docName = doc.id;
         const sellerIdFromDoc = docName.split('_')[0];
         const walletIdx = docName.split('_')[2];
+        const walletIdxOnly = walletIdx.split('x')[1];
         
         if (sellerIdFromDoc === sellerId) {
-          chosenWalletIdxList.push(walletIdx);
+          chosenWalletIdxList.push(walletIdxOnly);
         }
       });
   
@@ -76,20 +81,23 @@ module.exports = {
       console.error('데이터 읽기 실패:', error);
       return null;
     }
-  },
+  },  
   
   // sellet가 선택한 크립토 지갑들 정보 테이블에서 데이터를 삭제하는 함수
-  async deleteSellersChosenWallet(sellerId, cryptoWalletIdx) {
+  async delete(datas) {
       // 접근 db table name: sellers_chosen_wallet
       // sellers_chosen_wallet db table column: seller_id[pk], crypto_wallet_idx[pk]
     
       // sellerId : 판매자 아이디
       // cryptoWalletIdx : 판매자가 사용할 월렛 idx
   
-    const docName = `${sellerId}_wallet_idx${cryptoWalletIdx}`;
-  
+      
+      const sellerId = datas.seller_id;
+      const cryptoWalletIdx = datas.crypto_wallet_idx;
+      
+      const docName = `${sellerId}_wallet_idx${cryptoWalletIdx}`;
     try {
-      const docRef = db.collection("sellers_chosen_wallet").doc(docName);
+      const docRef = await db.collection("sellers_chosen_wallet").doc(docName);
       const doc = await docRef.get();
   
       if (doc.exists) {

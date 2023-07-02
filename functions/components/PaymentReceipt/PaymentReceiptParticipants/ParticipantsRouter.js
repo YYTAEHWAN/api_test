@@ -20,8 +20,8 @@ ParticipantsRouter.post("/paymentreceipt/participants", async (req,res) => {
 
 ParticipantsRouter.get("/paymentreceipt/participants", async (req,res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const participantsDoc = await ParticipantsDB.read(payment_receipt_idx);
+        // const payment_receipt_idx =  req.body.payment_receipt_idx;
+        const participantsDoc = await ParticipantsDB.read(req.body);
         res.status(200).json({
             message: "participants read 성공시 1, 실패시 -1",
             data: participantsDoc,
@@ -45,8 +45,8 @@ ParticipantsRouter.patch('/paymentreceipt/participants', async (req, res) => {
 
 ParticipantsRouter.delete('/paymentreceipt/participants', async (req, res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const result = await ParticipantsDB.delete(payment_receipt_idx);
+        // const payment_receipt_idx =  req.body.payment_receipt_idx;
+        const result = await ParticipantsDB.delete(req.body);
         res.status(200).json({
             message: "participants delete 성공시 1, 실패시 -1",
             data: result,

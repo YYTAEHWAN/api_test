@@ -8,8 +8,8 @@ const PriceAddressInfoRouter = express.Router();
 
 PriceAddressInfoRouter.post('/paymentreceipt/priceaddressinfo', async (req, res) => {
     try {
-        const priceAddressDatas = req.body;
-        const result = await PriceAddressInfoDB.create(priceAddressDatas);
+        // const priceAddressDatas = req.body;
+        const result = await PriceAddressInfoDB.create(req.body);
         res.status(200).json({
             message: "priceaddressinfo data 생성 성공시 1, 실패시 -1, 리턴 data는 result값",
             data: result,
@@ -21,9 +21,9 @@ PriceAddressInfoRouter.post('/paymentreceipt/priceaddressinfo', async (req, res)
 
 PriceAddressInfoRouter.get("/paymentreceipt/priceaddressinfo", async (req,res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
+        // const payment_receipt_idx =  req.body.payment_receipt_idx;
 
-        const priceaddressinfoDoc = await PriceAddressInfoDB.read(payment_receipt_idx);
+        const priceaddressinfoDoc = await PriceAddressInfoDB.read(req.body);
         res.status(200).json({
           message: "priceaddressinfo read 성공시 1, 실패시 -1",
           data: priceaddressinfoDoc,
@@ -48,8 +48,8 @@ PriceAddressInfoRouter.patch('/paymentreceipt/priceaddressinfo', async (req, res
 
 PriceAddressInfoRouter.delete('/paymentreceipt/priceaddressinfo', async (req, res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const result = await PriceAddressInfoDB.delete(payment_receipt_idx);
+        // const payment_receipt_idx =  req.body.payment_receipt_idx;
+        const result = await PriceAddressInfoDB.delete(req.body);
         res.status(200).json({
             message: "PriceAddressInfoDB delete 성공시 1, 실패시 -1",
             data: result,

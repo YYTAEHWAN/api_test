@@ -22,14 +22,17 @@ const db = admin.firestore();
 
 module.exports =   {
   // product_info 데이터 생성하는 함수
-  async createProductInfo(productName, productWonPricePer) {
+  async create(datas) {
     // 접근 db table name : product_info
     // product_info db table column : product_info_idx[pk], product_name, product_won_price_per
 
     // productName : 제품 이름
     // productWonPricePer : 제품 하나당 원화 가격
-
+    // productName, productWonPricePer
     try {
+      const productName = datas.product_name;
+      const productWonPricePer = datas.product_won_price_per;
+      
       const productInfoRef = db.collection("product_info");
 
       // product_info 컬렉션의 행 개수를 세기 위해 모든 문서를 가져옴
@@ -57,14 +60,15 @@ module.exports =   {
       return -1; // 실패
     }
   },
-
+  
   // product_info 데이터(제품 이름, 제품 하나당 원화 가격) 읽어오는 함수
-  async readProductInfo(productInfoIdx) {
+  async read(datas) {
     // 접근 db table name : product_info
     // product_info db table column : product_info_idx[pk], product_name, product_won_price_per
 
     // productInfoIdx : 제품 idx
     // ex) productInfoIdx = "productInfoIdx24"
+    const productInfoIdx = datas.product_info_idx;
 
     const docName = `product_info_idx${productInfoIdx}`;
 
@@ -83,15 +87,19 @@ module.exports =   {
       return null;
     }
   },
-
+  
   // product_info 데이터(제품 이름, 제품 하나당 원화 가격) 수정하는 함수
-  async updateProductInfo(productInfoIdx, modifiedProductName, modifiedProductWonPricePer) {
+  async update(datas) {
     // 접근 db table name : product_info
     // product_info db table column : product_info_idx[pk], product_name, product_won_price_per
 
     // productInfoIdx : 제품 idx
     // modifiedProductName : 수정된 제품의 이름
     // modifiedProductWonPricePer : 수정된 제품 하나당 원화 가격
+
+    const productInfoIdx = datas.product_info_idx;
+    const modifiedProductName = datas.product_name;
+    const modifiedProductWonPricePer = datas.product_won_price_per;
 
     const docName = `product_info_idx${productInfoIdx}`;
 
@@ -119,13 +127,14 @@ module.exports =   {
       return null;
     }
   },
-
+  
   // product_info 데이터를 삭제하는 함수
-  async deleteProductInfo(productInfoIdx) {
+  async delete(datas) {
     // 접근 db table name : product_info
     // product_info db table column : product_info_idx[pk], product_name, product_won_price_per
 
     // productInfoIdx : 제품 idx
+    const productInfoIdx = datas.product_info_idx;
 
     const docName = `product_info_idx${productInfoIdx}`;
 

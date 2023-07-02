@@ -44,8 +44,10 @@ module.exports =  {
     // 입력한 PaymentReceiptIdx 값이 기존에 존재하는 PaymentReceiptIdx인지 확인하는 함수
     async checkPaymentReceiptIdx(payment_receipt_idx) {
         try {
-            const doc = await statusInfoDB
-                .read(payment_receipt_idx);
+            const datas = {
+              payment_receipt_idx : payment_receipt_idx
+            }
+            const doc = await statusInfoDB.read(datas);
             if (doc) {
                 return 1; // 성공
             } else {
@@ -64,7 +66,10 @@ module.exports =  {
             // 오류가 있었어서 잠시 주석 달아놓음
             // const docName = `product_info_idx${product_info_idx}`
             // console.log("docName : ", docName);
-            const doc = await productInfoDB.readProductInfo(product_info_idx);
+            const datas = {
+              product_info_idx : product_info_idx
+            }
+            const doc = await productInfoDB.read(datas);
             // console.log("doc : ", doc)
             // console.log("doc.exists : ", doc.exists)
             if (doc) {
@@ -104,6 +109,7 @@ module.exports =  {
 
   async create(datas) {
     try {
+
       const doc = await db
         .collection('payment_receipt_multiple_products_info')
         .doc(`${datas.payment_receipt_idx}_product_info_idx_${datas.product_info_idx}`)
@@ -140,6 +146,9 @@ module.exports =  {
   },
 
   async read(datas) {
+    const payment_receipt_idx = datas.payment_receipt_idx;
+    const product_info_idx = datas.product_info_idx;
+
     try {
       // datas = payment_receipt_idx, product_info_idx
       const doc = await db
@@ -225,6 +234,9 @@ module.exports =  {
   },
 
   async delete(datas) {
+    const payment_receipt_idx = datas.payment_receipt_idx;
+    const product_info_idx = datas.product_info_idx;
+    
     try {
       // datas = payment_receipt_idx, product_info_idx
       const doc = await db
