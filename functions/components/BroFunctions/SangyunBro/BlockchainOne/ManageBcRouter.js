@@ -19,7 +19,7 @@ ManageBcRouter.post('/brofucntions/sangyunbro/BlockchainOne/createSellersChosenM
 
 ManageBcRouter.get('/brofucntions/sangyunbro/BlockchainOne/readMainBlockchainList', async (req, res) => {
     try {
-        const result = await ManageBcFuncs.readMainBlockchainList(req.body);
+        const result = await ManageBcFuncs.readMainBlockchainList(req.query);
         res.status(200).json({
             message: "read  MainBlockchainList 성공시 1 or 데이터, 실패시 -1 or null",
             data: result,

@@ -72,6 +72,9 @@ nangnangDB.use(express.json());
   // ConsumerData 폴더
   const ConsumerRouter = require('./components/User/ConsumerData/ConsumerRouter');
   nangnangDB.use(ConsumerRouter);
+    // ChosenWallet 폴더
+    const ConsumersChosenWalletRouter = require('./components/User/ConsumerData/ChosenWallet/ConsumersChosenWalletRouter');
+    nangnangDB.use(ConsumersChosenWalletRouter);
   
   // SellerData 폴더
   const SellerRouter = require('./components/User/SellerData/SellerRouter');

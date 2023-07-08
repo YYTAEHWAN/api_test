@@ -104,7 +104,7 @@ module.exports = {
       }
   },
 
-    // 이건 아직 테스트 안해봄 이건 아직 테스트 안해봄 이건 아직 테스트 안해봄
+  // 이건 아직 테스트 안해봄 이건 아직 테스트 안해봄 이건 아직 테스트 안해봄
    // 인덱스를 넣으면 낭낭이 제공하는 크립토 월렛의 이름을 제공하는 함수
    async readOneNameByIdx(datas) {
     // 접근 db 이름 : nangnang_crypto_wallet_list

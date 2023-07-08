@@ -7,7 +7,7 @@ const GetSellerDataRouter = express.Router();
 
 GetSellerDataRouter.get('/brofucntions/sangyunbro/GetSellerData/getsellerdata', async (req, res) => {
     try {
-        const result = await GetSellerDataFunc.getSellerData(req.body);
+        const result = await GetSellerDataFunc.getSellerData(req.query);
         res.status(200).json({
             message: "GetSellerData read 성공시 1 or 데이터, 실패시 -1 or null",
             data: result,

@@ -23,7 +23,7 @@ PriceAddressInfoRouter.get("/paymentreceipt/priceaddressinfo", async (req,res) =
     try {
         // const payment_receipt_idx =  req.body.payment_receipt_idx;
 
-        const priceaddressinfoDoc = await PriceAddressInfoDB.read(req.body);
+        const priceaddressinfoDoc = await PriceAddressInfoDB.read(req.query);
         res.status(200).json({
           message: "priceaddressinfo read 성공시 1, 실패시 -1",
           data: priceaddressinfoDoc,

@@ -55,11 +55,20 @@ module.exports = {
     console.log(datas)
     const id = datas.id;
     try {
+      // user_data 컬렉션에서 해당 문서 가져오기
+      const doc = await db.collection("user_data").doc(id).get();
+      if (doc.exists) {
+        // 문서가 존재하는 경우
+        console.log("이미 존재하는 아이디입니다.");
+        return -1; // 실패
+      }
+
       // user_data 컬렉션에 새로운 문서 생성
       await db.collection("user_data").doc(id).set(datas);
       return 1; // 성공
+
     } catch (error) {
-      console.error("데이터 생성 실패:", error);
+      console.error("데이터 읽기 실패:", error);
       return -1; // 실패
     }
   },
@@ -70,7 +79,9 @@ module.exports = {
     // user_data db table column : id[pk], password, consumer_or_not, email, real_name, phone_number, resident_registration_number
 
     // id : 사용자가 입력한 아이디
-    const id = datas.id;
+    const id = datas.id;   
+
+    console.log("db 함수 readUserData 가 실행되었습니다.")
     
     try {
         // user_data 컬렉션에서 해당 문서 가져오기

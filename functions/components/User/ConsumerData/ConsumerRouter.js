@@ -20,9 +20,7 @@ ConsumerRouter.post('/consumer', async (req, res) => {
 
 ConsumerRouter.get('/consumer', async (req, res) => {
     try {
-        console.log("req.body: "+req.body);
-        console.log("req.body.consumer_id: "+req.body.consumer_id)
-        const result = await ConsumerDB.readConsumer(req.body);
+        const result = await ConsumerDB.readConsumer(req.query);
         res.status(200).json({
             message: "consumer data read 성공시 1, 실패시 -1",
             data: result,

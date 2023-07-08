@@ -19,7 +19,7 @@ MultipleProductsInfoRouter.post('/paymentreceipt/multipleproductsinfo', async (r
 
 MultipleProductsInfoRouter.get("/paymentreceipt/multipleproductsinfo/readonlyquantity", async (req,res) => {
     try {
-        const multipleproductsinfoDoc = await MultipleProductsInfoDB.read(req.body);
+        const multipleproductsinfoDoc = await MultipleProductsInfoDB.read(req.query);
         console.log("multipleproductsinfoDoc: ", multipleproductsinfoDoc);
         res.status(200).json({
             message: "multipleproductsinfo read 성공시 1, 실패시 -1",

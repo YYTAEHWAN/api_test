@@ -19,7 +19,7 @@ SellersChosenWalletRouter.post('/sellerschosenwallet', async (req, res) => {
 
 SellersChosenWalletRouter.get('/sellerschosenwallet', async (req, res) => {
     try {
-        const result = await SellersChosenWalletDB.read(req.body);
+        const result = await SellersChosenWalletDB.read(req.query);
         res.status(200).json({
             message: "SellersChosenWallet read 성공시 1, 실패시 -1",
             data: result,

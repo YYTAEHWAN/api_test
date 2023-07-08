@@ -7,7 +7,7 @@ const ChosenWalletRouter = express.Router();
 
 ChosenWalletRouter.get('/brofucntions/sangyunbro/WalletTwo/chosenwallet', async (req, res) => {
     try {
-        const result = await ChosenWalletFuncs.read(req.body);
+        const result = await ChosenWalletFuncs.read(req.query);
         res.status(200).json({
             message: "ChosenWallet read 성공시 1 or 데이터, 실패시 -1 or null",
             data: result,

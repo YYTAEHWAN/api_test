@@ -33,7 +33,7 @@ MainBlockchainListRouter.get('/mainblockchainlist', async (req, res) => {
 MainBlockchainListRouter.get('/mainblockchainlist/readChainNameByIdx', async (req, res) => {
     try {
         console.log(req.body);
-        const result = await MainBlockchainListDB.readChainNameByIdx(req.body);
+        const result = await MainBlockchainListDB.readChainNameByIdx(req.query);
         res.status(200).json({
             message: "MainBlockchainList readOneNameByIdx 성공시 1 or 데이터, 실패시 -1 or null",
             data: result,
@@ -46,7 +46,7 @@ MainBlockchainListRouter.get('/mainblockchainlist/readChainNameByIdx', async (re
 MainBlockchainListRouter.get('/mainblockchainlist/readChainIdxByName', async (req, res) => {
     try {
         console.log(req.body);
-        const result = await MainBlockchainListDB.readChainIdxByName(req.body);
+        const result = await MainBlockchainListDB.readChainIdxByName(req.query);
         res.status(200).json({
             message: "MainBlockchainList readOneIdxByName 성공시 1 or 데이터, 실패시 -1 or null",
             data: result,

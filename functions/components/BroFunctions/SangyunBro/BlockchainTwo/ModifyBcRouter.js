@@ -7,7 +7,7 @@ const ModifyBcRouter = express.Router();
 
 ModifyBcRouter.get('/brofucntions/sangyunbro/BlockchainTwo/readSellersChosenMainBlockchain', async (req, res) => {
     try {
-        const result = await ModifyBcFuncs.readSellersChosenMainBlockchain(req.body);
+        const result = await ModifyBcFuncs.readSellersChosenMainBlockchain(req.query);
         res.status(200).json({
             message: "ModifyBc read 성공시 1 or 데이터, 실패시 -1 or null",
             data: result,

@@ -19,7 +19,7 @@ SellerRouter.post('/seller', async (req, res) => {
 
 SellerRouter.get('/seller', async (req, res) => {
     try {
-        const result = await SellerDB.readPlatformName(req.body);
+        const result = await SellerDB.readPlatformName(req.query);
         res.status(200).json({
             message: "셀러 read 성공시 1, 실패시 -1",
             data: result,

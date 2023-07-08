@@ -49,7 +49,8 @@ module.exports = {
     
         // consumerId : 소비자 아이디
         const consumerId = datas.consumer_id;
-
+        console.log("consumerId : " + consumerId)
+        console.log("datas.consumer_id : " + datas.consumer_id);
         try {
             console.log(consumerId);
             const docRef = await db.collection('consumer').doc(consumerId).get();
@@ -57,7 +58,8 @@ module.exports = {
                 const data = docRef.data();
                 return data.consumer_nickname; // 소비자 별명 리턴
             } else {
-                return null; // 문서가 존재하지 않음
+                console.error('문서가 존재하지 않음:' + consumerId);
+                return null; // 
             }
         } catch (error) {
             console.error('데이터 읽기 실패:', error);

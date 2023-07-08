@@ -19,7 +19,7 @@ WalletRouter.post('/brofucntions/sangyunbro/WalletOne/createSellerChosenWalletFu
 
 WalletRouter.get('/brofucntions/sangyunbro/WalletOne/readCryptoWalletListFunc', async (req, res) => {
     try {
-        const result = await WalletFuncs.readCryptoWalletListFunc(req.body);
+        const result = await WalletFuncs.readCryptoWalletListFunc(req.query);
         res.status(200).json({
             message: "Wallet read 성공시 1 or 데이터, 실패시 -1 or null",
             data: result,

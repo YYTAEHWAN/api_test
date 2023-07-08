@@ -11,8 +11,8 @@ LoginReturnDataRouter.post('/login/loginreturndata', async (req, res) => {
         console.log("input_user_pwd : ", req.body.input_user_pwd);
         const resultData = await LoginReturnDataFuncs.LoginReturnData(req.body);
         res.status(200).json({
-            message: "LoginReturnData 성공시 resultData, 실패시 -1",
-            data: resultData,
+            message: `LoginReturnData 성공시 resultData, 실패시 -1`,
+            result: resultData,
         });
     } catch (error) {
         res.status(400).send(error.message+"/ login 실패");

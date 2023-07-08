@@ -19,7 +19,7 @@ SellersChosenMainBlockchainRouter.post('/sellerschosenmainblockchain', async (re
 
 SellersChosenMainBlockchainRouter.get('/sellerschosenmainblockchain', async (req, res) => {
     try {
-        const result = await SellersChosenMainBlockchainDB.read(req.body);
+        const result = await SellersChosenMainBlockchainDB.read(req.query);
         res.status(200).json({
             message: "SellersChosenMainBlockchain read 성공시 1, 실패시 -1",
             data: result,

@@ -38,8 +38,7 @@ StatusInfoRouter.post('/paymentreceipt/statusinfo', async (req, res) => {
 
 StatusInfoRouter.get("/paymentreceipt/statusinfo", async (req,res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const statusinfoDoc = await StatusInfoDB.read(payment_receipt_idx);
+        const statusinfoDoc = await StatusInfoDB.read(req.query);
         res.status(200).json({
           message: "영수증 statusinfo read 성공시 1, 실패시 -1, 리턴 data는 statusinfoDoc",
           data: statusinfoDoc,
@@ -62,8 +61,7 @@ StatusInfoRouter.patch('/paymentreceipt/statusinfo', (req, res) => {
 
 StatusInfoRouter.delete('/paymentreceipt/statusinfo', async (req, res) => {
     try {
-        const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const result = await StatusInfoDB.delete(payment_receipt_idx);
+        const result = await StatusInfoDB.delete(req.body);
         res.status(200).json({
             message: "영수증 삭제 성공시 1, 실패시 -1",
             data: result,

@@ -19,7 +19,7 @@ ProductInfoRouter.post('/productinfo', async (req, res) => {
 
 ProductInfoRouter.get('/productinfo', async (req, res) => {
     try {
-        const result = await ProductInfoDB.read(req.body);
+        const result = await ProductInfoDB.read(req.query);
         res.status(200).json({
             message: "ProductInfo read 성공시 1, 실패시 -1",
             data: result,

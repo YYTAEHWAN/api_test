@@ -55,7 +55,7 @@ module.exports = {
     // productInfoIdx : 판매하려는 제품의 idx
 
     const seller_id = datas.seller_id;
-    const product_info_idx = datas.product_info_idx;
+    const product_info_idx = datas.product_info_idx;    
 
     const docName = `${seller_id}_product_info_idx${product_info_idx}`;
 

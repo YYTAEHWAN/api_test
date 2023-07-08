@@ -19,9 +19,9 @@ SellerProductRouter.post('/sellerproduct', async (req, res) => {
 
 SellerProductRouter.get('/sellerproduct', async (req, res) => {
     try {
-        const result = await SellerProductDB.read(req.body);
+        const result = await SellerProductDB.read(req.query);
         res.status(200).json({
-            message: "SellerProduct read 성공시 1, 실패시 -1",
+            message: "SellerProduct read 성공시 빈 오브젝트 리턴, 실패시 -1",
             data: result,
         });
     } catch (error) {

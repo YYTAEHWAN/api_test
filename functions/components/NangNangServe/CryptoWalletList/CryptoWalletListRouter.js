@@ -32,7 +32,7 @@ CryptoWalletListRouter.get('/cryptowalletlist/read', async (req, res) => {
 CryptoWalletListRouter.get('/cryptowalletlist/readOneNameByIdx', async (req, res) => {
     try {
         console.log(req.body);
-        const result = await CryptoWalletListDB.readOneNameByIdx(req.body);
+        const result = await CryptoWalletListDB.readOneNameByIdx(req.query);
         res.status(200).json({
             message: "CryptoWalletList readOneNameByIdx 성공시 1, 실패시 (-1 or null)",
             data: result,
@@ -44,7 +44,7 @@ CryptoWalletListRouter.get('/cryptowalletlist/readOneNameByIdx', async (req, res
 
 CryptoWalletListRouter.get('/cryptowalletlist/readOneIdxByName', async (req, res) => {
     try {
-        const result = await CryptoWalletListDB.readOneIdxByName(req.body);
+        const result = await CryptoWalletListDB.readOneIdxByName(req.query);
         res.status(200).json({
             message: "CryptoWalletList readOneIdxByName 성공시 1, 실패시 (-1 or null)",
             data: result,

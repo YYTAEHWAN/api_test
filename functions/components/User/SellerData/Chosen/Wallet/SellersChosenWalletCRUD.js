@@ -27,15 +27,18 @@ module.exports = {
   
       // sellerId : 판매자 아이디
       // cryptoWalletIdx : 판매자가 사용할 월렛 idx
+      // wallet_address : 판매자가 사용할 월렛 address
+      
       const sellerId = datas.seller_id;
       const cryptoWalletIdx = datas.crypto_wallet_idx;
+      const WalletAddress = datas.wallet_address;
 
       try {
           const docName = `${sellerId}_wallet_idx${cryptoWalletIdx}`;
       
           const sellersChosenWalletData = {
               seller_id: sellerId,
-              crypto_wallet_idx: cryptoWalletIdx,
+              wallet_address: WalletAddress,
           };
 
           const sellersChosenWalletRef = db.collection("sellers_chosen_wallet");
@@ -56,27 +59,35 @@ module.exports = {
     // sellers_chosen_wallet db table column: seller_id[pk], crypto_wallet_idx[pk]
   
     // sellerId : 판매자 아이디
-    // cryptoWalletIdx : 판매자가 사용할 월렛 idx
     
     const sellerId = datas.seller_id;
+    // console.log("sellerId 는 " + sellerId);
+
     try {
       const sellersChosenWalletRef = db.collection('sellers_chosen_wallet');
   
       const querySnapshot = await sellersChosenWalletRef.get();
-  
-      const chosenWalletIdxList = [];
+
+      var chosenWalletIdxAndAddress = {};
       querySnapshot.forEach((doc) => {
         const docName = doc.id;
+        const walletAddress = doc.data().wallet_address;
+
+
         const sellerIdFromDoc = docName.split('_')[0];
         const walletIdx = docName.split('_')[2];
         const walletIdxOnly = walletIdx.split('x')[1];
-        
+
+
         if (sellerIdFromDoc === sellerId) {
-          chosenWalletIdxList.push(walletIdxOnly);
+          console.log("walletIdxOnly" + walletIdxOnly)
+          console.log("walletAddress" + walletAddress)
+          chosenWalletIdxAndAddress[walletIdxOnly] = walletAddress;
         }
       });
-  
-      return chosenWalletIdxList; // seller가 선택한 크립토 지갑 리스트 반환
+      console.log("chosenWalletIdxAndAddress 는 " + JSON.stringify(chosenWalletIdxAndAddress));
+
+      return chosenWalletIdxAndAddress; // seller가 선택한 크립토 지갑 리스트 반환
     } catch (error) {
       console.error('데이터 읽기 실패:', error);
       return null;

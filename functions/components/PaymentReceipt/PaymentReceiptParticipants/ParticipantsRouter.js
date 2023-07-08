@@ -7,8 +7,7 @@ const ParticipantsRouter = express.Router();
 
 ParticipantsRouter.post("/paymentreceipt/participants", async (req,res) => {
     try {
-        const participantsDatas = req.body;
-        const result = await ParticipantsDB.create(participantsDatas);
+        const result = await ParticipantsDB.create(req.body);
         res.status(200).json({
             message: "participants data 생성 성공시 1, 실패시 -1, 리턴 data는 result값",
             data: result,
@@ -21,7 +20,7 @@ ParticipantsRouter.post("/paymentreceipt/participants", async (req,res) => {
 ParticipantsRouter.get("/paymentreceipt/participants", async (req,res) => {
     try {
         // const payment_receipt_idx =  req.body.payment_receipt_idx;
-        const participantsDoc = await ParticipantsDB.read(req.body);
+        const participantsDoc = await ParticipantsDB.read(req.query);
         res.status(200).json({
             message: "participants read 성공시 1, 실패시 -1",
             data: participantsDoc,
