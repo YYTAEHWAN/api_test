@@ -14,6 +14,10 @@ nangnangDB.use(express.json());
   const LoginReturnDataRouter = require('./components/BroFunctions/LoginReturnData/LoginReturnDataRouter');
   nangnangDB.use(LoginReturnDataRouter);
 
+  // GetPaymentReceiptData 폴더
+  const GetPaymentReceiptDataRouter = require('./components/BroFunctions/GetPaymentReceiptData/GetPaymentReceiptDataRouter');
+  nangnangDB.use(GetPaymentReceiptDataRouter);
+
   // DongyuBro 폴더
     // PaymentProcess
     const PaymentProcessRouter = require('./components/BroFunctions/DongyuBro/PaymentProcess/PaymentProcessRouter');

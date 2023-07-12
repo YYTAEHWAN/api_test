@@ -170,13 +170,14 @@ module.exports =  {
   },
 
   // payment_receipt_idx만 넣었을 때, 해당 payment_receipt_idx에 해당하는 모든 product_info_idx 데이터를 가져오는 함수
-  // dongyuBro/PaymentProcess에서 사용되는 함수
-  async readAllProductInfoIdxAndQuantity(i_payment_receipt_idx) {
+  // 
+  async readAllProductInfoIdxAndQuantity(datas) {
     // 접근 db table name: payment_receipt_multiple_products_info
     // payment_receipt_multiple_products_info db table column: payment_receipt_idx[pk], product_info_idx[pk], quantity
     
     // payment_receipt_idx: 결제 영수증 식별 idx
 
+    const i_payment_receipt_idx = datas.payment_receipt_idx;
     try {
       const querySnapshot = await db.collection('payment_receipt_multiple_products_info').get();
   
@@ -201,6 +202,50 @@ module.exports =  {
     } catch (error) {
       console.error('데이터 읽기 실패:', error);
       console.log("--readAllProductInfoIdxAndQuantity 비정상 종료--");
+      return null;
+    }
+  },
+
+  async readAllProductInfoIdxAndQuantityReturnArray(datas) {
+    // 접근 db table name: payment_receipt_multiple_products_info
+    // payment_receipt_multiple_products_info db table column: payment_receipt_idx[pk], product_info_idx[pk], quantity
+    
+    // payment_receipt_idx: 결제 영수증 식별 idx
+
+    const i_payment_receipt_idx = datas.payment_receipt_idx;
+    try {
+      const querySnapshot = await db.collection('payment_receipt_multiple_products_info').get();
+  
+      const productInfoDatas = [];
+
+      var i = 0;
+      querySnapshot.forEach((doc) => {
+        const docName = doc.id;
+        const data = doc.data();
+
+        // 문서 이름을 파싱하여 원하는 데이터 추출
+        const parts = docName.split('_'); // 예시 : 1_product_info_idx_1 -> "1", "product", "info", "idx", "1"
+        const payment_receipt_idx = parts[0]; // "1"
+        const product_info_idx = parts[4];
+
+        console.log("readAllProductInfoIdxAndQuantityReturnArray 시작")
+        if (String(i_payment_receipt_idx) === String(payment_receipt_idx)) {
+          var dataSet = {};
+          dataSet = {
+            "product_info_idx" : product_info_idx,
+            "quantity" : data.quantity
+          };
+          console.log("dataSet: ", JSON.stringify(dataSet));
+          productInfoDatas.push(dataSet);
+          
+        }
+      });
+      console.log("readAllProductInfoIdxAndQuantityReturnArray 끝")
+      return productInfoDatas;
+
+    } catch (error) {
+      console.error('데이터 읽기 실패:', error);
+      console.log("--readAllProductInfoIdxAndQuantityReturnArray 비정상 종료--");
       return null;
     }
   },

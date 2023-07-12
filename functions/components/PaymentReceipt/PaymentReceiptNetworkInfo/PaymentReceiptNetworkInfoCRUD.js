@@ -71,11 +71,11 @@ module.exports =  {
         return resultObject;
       } else {
         console.log('해당 데이터가 없습니다.');
-        return null;
+        return -1;
       }
     } catch (error) {
       console.error('데이터 읽기 실패:', error);
-      return null;
+      return -1;
     }
   },
 

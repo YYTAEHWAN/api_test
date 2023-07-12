@@ -36,7 +36,69 @@ module.exports = {
         }
     },
 
+    // storePaymentData 함수와 그 안에 쓰이는 함수들 시작
+    // 2번째로 사용되는 함수(앱에서 사용) 결제가 완료되면 이 함수를 앱에서 호출할 거임
+    async storePaymentData(datas) {
 
+        let result = -1; // -1로 초기화
+
+        // 1. participants DB 생성
+        // 해당 영수증(거래)에 참여한 consumer_id와 seller_id 저장
+        result = await participantsDB.create(datas.priceAddressInfo_object); // 저장하는 곳은 payment_receipt_participants db
+        if(result === -1) return -1; // 실패
+        console.log("storePaymentData에서 participantsDB create 완료");
+        
+
+        // 2. multiple_products_info DB ,product_info DB, seller_products DB 생성
+        // 제품 정보 저장 (있으면 저장 안하고 없으면 저장하고 ) 어쨋든 product_info_idx를 리턴
+        // 여기서 products를 하나의 product로 나눠서 넣어주고, 함수 써주는 게 깔끔할 듯
+        for (let i = 0; i < datas.products.length; i++) {
+            const one_product_info_object = datas.products[i];
+            // console.log(`${i+1}번째 루프`)
+            // 3-2. 셀러가 넣은 제품의 데이터가 seller_products에 있는지 확인하고 없으면 저장하는 함수
+            // 데이터가 없다면 result 값은 1, 있다면 0,
+            // result 값이 -1이면 데이터 없어서 저장하다가 실패한 경우
+
+            // 저장하는 곳은 seller_products, product_info db
+            
+            const product_info_idx_num = await this.saveProductDataSentBySeller(datas.priceAddressInfo_object.seller_id, one_product_info_object); 
+            
+            if(product_info_idx_num === -1) {
+                // 데이터 저장이 실패했다면
+                return -1; // -1: 실패
+            }
+            else {
+                // 이부분에 들어왔다면 정상 작동 흐름임, product_info_idx이 값을 가지고 있음
+                // 저장하는 곳은 payment_receipt_multiple_products_info db
+                const input_datas = {
+                    "payment_receipt_idx" : datas.priceAddressInfo_object.payment_receipt_idx,
+                    "product_info_idx" : product_info_idx_num,
+                    "quantity" : one_product_info_object.quantity
+                }
+                // multiple_products_info DB 생성
+                result = await multipleProductsInfoDB.create(input_datas);
+                if(result === -1) return -1; // -1: 실패
+            }
+        }
+        console.log("storePaymentData에서 multipleProductsInfoDB create 완료");
+
+        // 3.price_address_info DB 생성
+        const result10 = await priceAddressInfoDB.create(datas.priceAddressInfo_object);
+        if (result10 === -1) return -1; // -1: 실패
+        console.log("storePaymentData에서 priceAddressInfoDB create 완료");
+
+        // 4. network_info DB 생성
+        result = await networkInfoDB.create(datas.networkInfo_obejct);
+        if(result === -1) return -1; // -1: 실패
+        console.log("storePaymentData에서 networkInfoDB create 완료");
+        
+        // 4. 영수증의 상태를 "결제 완료(999) 상태로 바꿈 
+        result = await this.endSetting(datas.priceAddressInfo_object.payment_receipt_idx, 999)
+        if(result === -1) return -1; // -1: 실패
+        console.log("storePaymentData에서 영수증 endSetting 완료");
+        
+        return 1111;
+    },
     
     // 단계 1. product_info에 (제품명,원화가격) 해당 데이터가 있는지 확인한 후 없다면 저장 (product_info_idx는 자동 증가후 저장됨)
     // 단계 2. 없었다면 seller_products에 (판매자 아이디, product_info_idx) 저장
@@ -119,69 +181,10 @@ module.exports = {
         const result = await statusInfoDB.updatePaymentEnd(datas);
         return result; // 1: 성공, -1: 실패
     },
+    // storePaymentData 함수와 그 안에 쓰이는 함수들 끝
 
-    // 2번째로 사용되는 함수(앱에서 사용) 결제가 완료되면 이 함수를 앱에서 호출할 거임
-    async storePaymentData(datas) {
-
-        let result = -1; // -1로 초기화
-
-        // 1. participants DB 생성
-        // 해당 영수증(거래)에 참여한 consumer_id와 seller_id 저장
-        result = await participantsDB.create(datas.priceAddressInfo_object); // 저장하는 곳은 payment_receipt_participants db
-        if(result === -1) return -1; // 실패
-        console.log("storePaymentData에서 participantsDB create 완료");
-        
-
-        // 2. multiple_products_info DB ,product_info DB, seller_products DB 생성
-        // 제품 정보 저장 (있으면 저장 안하고 없으면 저장하고 ) 어쨋든 product_info_idx를 리턴
-        // 여기서 products를 하나의 product로 나눠서 넣어주고, 함수 써주는 게 깔끔할 듯
-        for (let i = 0; i < datas.products.length; i++) {
-            const one_product_info_object = datas.products[i];
-            // console.log(`${i+1}번째 루프`)
-            // 3-2. 셀러가 넣은 제품의 데이터가 seller_products에 있는지 확인하고 없으면 저장하는 함수
-            // 데이터가 없다면 result 값은 1, 있다면 0,
-            // result 값이 -1이면 데이터 없어서 저장하다가 실패한 경우
-
-            // 저장하는 곳은 seller_products, product_info db
-            
-            const product_info_idx_num = await this.saveProductDataSentBySeller(datas.priceAddressInfo_object.seller_id, one_product_info_object); 
-            
-            if(product_info_idx_num === -1) {
-                // 데이터 저장이 실패했다면
-                return -1; // -1: 실패
-            }
-            else {
-                // 이부분에 들어왔다면 정상 작동 흐름임, product_info_idx이 값을 가지고 있음
-                // 저장하는 곳은 payment_receipt_multiple_products_info db
-                const input_datas = {
-                    "payment_receipt_idx" : datas.priceAddressInfo_object.payment_receipt_idx,
-                    "product_info_idx" : product_info_idx_num,
-                    "quantity" : one_product_info_object.quantity
-                }
-                // multiple_products_info DB 생성
-                result = await multipleProductsInfoDB.create(input_datas);
-                if(result === -1) return -1; // -1: 실패
-            }
-        }
-        console.log("storePaymentData에서 multipleProductsInfoDB create 완료");
-
-        // 3.price_address_info DB 생성
-        const result10 = await priceAddressInfoDB.create(datas.priceAddressInfo_object);
-        if (result10 === -1) return -1; // -1: 실패
-        console.log("storePaymentData에서 priceAddressInfoDB create 완료");
-
-        // 4. network_info DB 생성
-        result = await networkInfoDB.create(datas.networkInfo_obejct);
-        if(result === -1) return -1; // -1: 실패
-        console.log("storePaymentData에서 networkInfoDB create 완료");
-        
-        // 4. 영수증의 상태를 "결제 완료(999) 상태로 바꿈 
-        result = await this.endSetting(datas.priceAddressInfo_object.payment_receipt_idx, 999)
-        if(result === -1) return -1; // -1: 실패
-        console.log("storePaymentData에서 영수증 endSetting 완료");
-        
-        return 1111;
-    },
+    
+    
 }
 
 
